@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
@@ -24,6 +25,7 @@ public class FlierPanel extends JPanel implements Runnable
 	
 	private Fliers flTop;
 	private Obstacles obs;
+	private Ship player;
 	private long period;
 	
 	
@@ -48,7 +50,7 @@ public class FlierPanel extends JPanel implements Runnable
 		//readyForTermination();
 		
 		obs = new Obstacles( flTop );
-		//player = new Ship( PWIDTH, PHEIGHT, obs );
+		player = new Ship( PWIDTH, PHEIGHT, obs );
 		
 		addKeyListener( new KeyListener() {
 			
@@ -60,8 +62,13 @@ public class FlierPanel extends JPanel implements Runnable
 			
 			@Override
 			public void keyPressed( KeyEvent e ) {
-				System.out.println( "Pressed " + (e.getKeyCode()-37) );
-				flTop.setDirection( e.getKeyCode()-37 );
+				int kc = e.getKeyCode();
+
+				if ( kc >= 37 && kc <= 40 ) {
+					System.out.println( "Pressed " + (kc-37) );
+					flTop.setDirection( kc-37 );
+					player.move( kc-37 );
+				}
 			}
 		});
 		
@@ -132,10 +139,17 @@ public class FlierPanel extends JPanel implements Runnable
 		running = true;
 		
 		while (running) {
-			//gameUpdate();
+			gameUpdate();
 			gameRender();
 			paintScreen();
 			
+			try {
+				Thread.sleep(2);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			long timeNow = System.nanoTime();
 			timeSpentInGame = (int) ((timeNow - gameStartTime)/1000000000L);
 			//timeSpentInGame = 5;
@@ -147,7 +161,7 @@ public class FlierPanel extends JPanel implements Runnable
 	
 	private void gameUpdate()
 	{
-		//code here
+		obs.update();
 	}
 	
 	private void gameRender()
@@ -172,6 +186,7 @@ public class FlierPanel extends JPanel implements Runnable
 		}
 		
 		obs.draw(dbg);
+		player.draw(dbg);
 	}
 	
 	//private void gameOverMessage( Graphics g )

@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 public class Fliers extends JFrame implements WindowListener
 {
-	private static final int DEFAULT_FPS = 80; 
+	private static final int DEFAULT_FPS = 60; 
 	
 	private String[] dirList = {"LEFT", "UP", "RIGHT", "DOWN" };
 	

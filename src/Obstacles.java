@@ -6,6 +6,9 @@ public class Obstacles {
 	private static final int BOX_WIDTH = 12;
 	private static final int BOX_LENGTH = 12;
 	
+	private static final int PWIDTH = 500;
+	private static final int PHEIGHT = 400;
+	
 	private ArrayList boxes;
 	private Fliers flTop;
 	private boolean isSelected = false;
@@ -42,6 +45,25 @@ public class Obstacles {
 	
 	synchronized public void deSelect()
 	{	isSelected = false; }
+	
+	synchronized public void update()
+	{
+		Rectangle box;
+		ArrayList livingBoxes = new ArrayList();
+		
+		for( int i=0; i < boxes.size(); i++) {
+			box = (Rectangle) boxes.get(i);
+			box.y += 1;
+			
+			if ( box.y < PHEIGHT ) {
+				livingBoxes.add( box );
+			} else {
+				System.out.println( "Box lost!" );
+			}
+		}
+		
+		boxes = livingBoxes;
+	}
 	
 	synchronized public void draw( Graphics g )
 	{
