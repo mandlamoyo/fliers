@@ -67,7 +67,7 @@ public class FlierPanel extends JPanel implements Runnable
 				if ( kc >= 37 && kc <= 40 ) {
 					System.out.println( "Pressed " + (kc-37) );
 					flTop.setDirection( kc-37 );
-					player.move( kc-37 );
+					//player.move( kc-37 );
 				}
 			}
 		});
@@ -162,6 +162,7 @@ public class FlierPanel extends JPanel implements Runnable
 	private void gameUpdate()
 	{
 		obs.update();
+		player.update();
 	}
 	
 	private void gameRender()
