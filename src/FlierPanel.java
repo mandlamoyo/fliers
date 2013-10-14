@@ -50,7 +50,14 @@ public class FlierPanel extends JPanel implements Runnable
 		//readyForTermination();
 		
 		obs = new Obstacles( flTop );
-		player = new Ship( PWIDTH, PHEIGHT, obs );
+		int[][] spos = new int[][] {
+				{-10,5},
+				{-6,11},
+				{0,3},
+				{7,17}
+		};
+
+		player = new Ship( new int[][] {{-100,15},{-6,41},{0,10},{27,17}}, PWIDTH, PHEIGHT, obs );
 		
 		addKeyListener( new KeyListener() {
 			

@@ -1,15 +1,10 @@
-fliers
+Fliers
 ======
 
-Machine learning java project
+Machine Learning Java Project
 
-Current status:
-	Movable ship
-	Descending blocks
-
-To do:
-	Add ship sensor infrastucture
-	Implement sensors
-	Multisized bricks
-	Autonomous ship movement
-	Ship-brick collision detection
+This is a machine learning demo in the style of top down shooters, such
+as 'Raiden'. The idea of the simulation is to illustrate the process of
+neural network evolution by showing computer-controlled ships learning to
+navigate around (or possibly destroy) various obstacles, as well as pursue
+various powerups.

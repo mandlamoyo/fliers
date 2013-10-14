@@ -2,6 +2,7 @@ import java.awt.Point;
 
 
 public class Sensor {
+	private static final int OOB = -1;
 	private static final int INACTIVE = 0;
 	private static final int ACTIVE = 1;
 	private static final int SIZE = 5;
@@ -38,15 +39,27 @@ public class Sensor {
 		pos[1] = body.y;
 	}
 	
+	private void setState()
+	{
+		//if ( body.x <= 0 || body.x >= pWidth ) direction = Math.abs( direction-2 );
+		if ( owner.outOfBounds(body.x, body.y )) {
+			state = OOB;
+		} 
+		else {
+			if ( obs.isSelectedAt( body.x, body.y )) {
+				state = ACTIVE;
+			} else {
+				state = INACTIVE;
+			}
+		}
+	}
 	
 	public void update()
 	{
 		updatePos();
 		//Should sensor updating consume energy?
-		if ( obs.isSelectedAt( body.x, body.y )) {
-			state = ACTIVE;
-		} else {
-			state = INACTIVE;
-		}
+		setState();
+
+
 	}
 }
