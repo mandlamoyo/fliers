@@ -2,16 +2,27 @@ import java.awt.Point;
 
 
 public class Sensor {
+	private static final int INACTIVE = 0;
+	private static final int ACTIVE = 1;
+	private static final int SIZE = 5;
+	
 	private Point body;
-	private int state;
+	public int state;
+	private int id;
 	private int[] stateTypes;
 	private int[] relativePos;
 	private Ship owner;
+	private Obstacles obs;
 	
-	public Sensor( int rx, int ry, Ship s )
+	public int size;
+	public int[] pos = new int[2];
+	
+	public Sensor( int rx, int ry, Ship s, Obstacles os )
 	{
 		owner = s;
-		state = 0;
+		obs = os;
+		size = SIZE;
+		state = INACTIVE;
 		body = new Point();
 		relativePos = new int[] {rx,ry};
 		updatePos();
@@ -22,10 +33,20 @@ public class Sensor {
 		int[] ownerPos = owner.getPos();
 		body.x = ownerPos[0] + relativePos[0];
 		body.y = ownerPos[1] + relativePos[1];
+		
+		pos[0] = body.x;
+		pos[1] = body.y;
 	}
+	
 	
 	public void update()
 	{
 		updatePos();
+		//Should sensor updating consume energy?
+		if ( obs.isSelectedAt( body.x, body.y )) {
+			state = ACTIVE;
+		} else {
+			state = INACTIVE;
+		}
 	}
 }

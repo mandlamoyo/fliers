@@ -10,6 +10,7 @@ public class Ship {
 	private int pWidth, pHeight, direction;
 	private int[][] dirList = {{-1,0},{0,-1},{1,0},{0,1}};
 	private Obstacles obs;
+	private Sensor[] sensors;
 	private Point body;
 	
 	public Ship( int pW, int pH, Obstacles os )
@@ -19,6 +20,7 @@ public class Ship {
 		obs = os;
 		direction = 0;
 		body = new Point( pWidth/2, pHeight/2 );
+		sensors = new Sensor[] {new Sensor( 4, -12, this, obs )};
 	}
 	
 	public void move( int dir )
@@ -32,18 +34,34 @@ public class Ship {
 		if ( body.x <= 0 || body.x >= pWidth ) direction = Math.abs( direction-2 );
 		move(direction);
 		
-		
-		//code here
+		for ( Sensor s: sensors ) {
+			s.update();
+		}
 	}
 	
 	public int[] getPos()
 	{
-		return new int[] {body.x, body.y};
+		return new int[] {body.x+RADIUS, body.y};
+	}
+	
+	private int[] getSensorOutput()
+	{
+		//code goes here
+		return new int[3];
 	}
 	
 	public void draw( Graphics g )
 	{
+		
 		g.setColor( Color.red );
 		g.fillOval( body.x,  body.y,  BODY_SIZE,  BODY_SIZE );
+		
+		g.setColor( Color.green );
+		for ( Sensor s: sensors ) {
+			if ( s.state == 0 ) g.setColor( Color.green );
+			else g.setColor( Color.orange );
+			
+			g.fillOval( s.pos[0],  s.pos[1],  s.size,  s.size);
+		}
 	}
 }

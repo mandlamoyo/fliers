@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 
 public class Obstacles {
-	private static final int BOX_WIDTH = 12;
-	private static final int BOX_LENGTH = 12;
+	private static final int BOX_WIDTH = 52;
+	private static final int BOX_LENGTH = 32;
 	
 	private static final int PWIDTH = 500;
 	private static final int PHEIGHT = 400;

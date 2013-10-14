@@ -144,7 +144,7 @@ public class FlierPanel extends JPanel implements Runnable
 			paintScreen();
 			
 			try {
-				Thread.sleep(2);
+				Thread.sleep(4);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
