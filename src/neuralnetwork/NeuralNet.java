@@ -15,7 +15,7 @@ public class NeuralNet {
 	public NeuralNet()
 	{
 		bias = -1;
-		outputs = new double[numOutputs];
+		outputs = new ArrayList<Double>; 
 	}
 	
 	private void CreateNet()
@@ -59,16 +59,19 @@ public class NeuralNet {
 		return 0.0;
 	}
 	
-	private double[] update( double[] inputs )
+	private ArrayList<Double> update( ArrayList<Double> inputs )
 	{
 		int currentWeight = 0;
 		
-		if ( inputs.length != numInputs ) return (outputs = new double[outputs.length]);
+		if ( inputs.size() != numInputs ) {
+			outputs.clear();
+			return outputs;
+		}
 		
 		for ( int i=0; i < numHiddenLayers; i++ ) {
-			if ( i > 0 ) System.arraycopy( outputs, 0, inputs, 0, outputs.length );
+			if ( i > 0 ) inputs = outputs.clone(); 
 			
-			outputs = new double[outputs.length];
+			outputs = new double[outputs.size()];
 			currentWeight = 0;
 			
 			for ( int j=0; j < layers[i].numNeurons; j++ ) {
