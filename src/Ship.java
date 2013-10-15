@@ -7,13 +7,17 @@ public class Ship {
 	private static final int Y = 1;
 	private static final int LEFT = 0;
 	private static final int RIGHT = 1;
+	private static final int UP = 2;
+	private static final int DOWN = 3;
+	
 	private static final int BODY_SIZE = 32;
 	private static final int RADIUS = BODY_SIZE/2;
 	private static final int MAX_SENSORS = 10;
-	private static final int MAX_VEL = 5;
+	private static final int MAX_VEL = 4;
 	private static final double FRICTION = 0.2;
 	
 	private int pWidth, pHeight, direction;
+	private int[] output;
 	private int[][] dirList = {{-1,0},{0,-1},{1,0},{0,1}};
 	private int[][] genome;
 	private Obstacles obs;
@@ -43,6 +47,7 @@ public class Ship {
 		body = new Point( pWidth/2, pHeight/2 );
 		velocity = new Point( 0, 0 );
 		genome = g;
+		output = new int[genome.length];
 		sensors = new Sensor[genome.length];
 		for ( int i=0; i < genome.length; i++ ) {
 			sensors[i] = new Sensor( genome[i][X], 0-genome[i][Y], this, obs );
@@ -69,25 +74,68 @@ public class Ship {
 	{
 		//if ( body.x <= 0 || body.x >= pWidth ) direction = Math.abs( direction-2 );
 		//if ( outOfBounds( body.x, body.y ) == true ) direction = Math.abs( direction-2 );
-		move(direction);
-		if ( outOfBounds( body.x, body.y ) == true ) body = new Point( pWidth/2, pHeight/2 );
-		for ( Sensor s: sensors ) {
-			s.update();
-		}
 		
-		//VELOCITY STUFF
+		
+		//Update sensors
+		getSensorOutput();
+		/*if (rInt.nextInt(600) < 10) {
+			System.out.print( "Sensor output: ");
+			for (int i : output) {
+				System.out.print( i );
+				System.out.print( ", " );
+			}
+			System.out.print( "\n" );
+			//System.out.println( output );
+		}*/
+		
+		//Update velocity
 		if (rInt.nextInt(100) < 20) {
 			if ( rInt.nextInt(2) == 0 ) thrust( LEFT );
 			else thrust( RIGHT );
 		}
 		
+		if (rInt.nextInt(100) < 20) thrust( rInt.nextInt(4) );
+		
 		if ( velocity.x > MAX_VEL ) velocity.x = MAX_VEL;
 		if ( velocity.y > MAX_VEL ) velocity.y = MAX_VEL;
+		
+		//apply velocity
+		move(direction);
+		
+		//boundary checking
+		if ( outOfBounds( body.x, body.y ) == true ) {
+			body = new Point( pWidth/2, pHeight/2 );
+			velocity = new Point( 0, 0 );
+		}
+		
+		
+		
+		
 	}
 	
 	private void thrust( int dir )
 	{
-		velocity.x += (dir == LEFT) ? -1 : 1;
+		//velocity.x += (dir == LEFT) ? -1 : 1;
+		switch( dir ){ 
+			case LEFT:
+				velocity.x -= 1;
+				break;
+				
+			case RIGHT:
+				velocity.x += 1;
+				break;
+				
+			case UP:
+				velocity.y -= 1;
+				break;
+				
+			case DOWN:
+				velocity.y += 1;
+				break;
+				
+			default:
+				break;
+		}
 	}
 	
 	public int[] getPos()
@@ -95,10 +143,12 @@ public class Ship {
 		return new int[] {body.x+RADIUS, body.y};
 	}
 	
-	private int[] getSensorOutput()
-	{
-		//code goes here
-		return new int[3];
+	private void getSensorOutput()
+	{	
+		for ( int i=0; i< sensors.length; i++ ) {
+			sensors[i].update();
+			output[i] = sensors[i].getState();
+		}
 	}
 	
 	public void draw( Graphics g )
