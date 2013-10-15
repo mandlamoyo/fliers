@@ -22,6 +22,7 @@ public class Ship {
 	private int[] output;
 	private int[][] dirList = {{-1,0},{0,-1},{1,0},{0,1}};
 	private int[][] genome;
+	private ArrayList<Double> brainInput;
 	private ArrayList<Double> brainOutput;
 	private ArrayList<Double> sensorOutput;
 	
@@ -33,6 +34,7 @@ public class Ship {
 	private Random rInt = new Random();
 	private NeuralNet brain;
 	
+	/*
 	public Ship( int pW, int pH, Obstacles os )
 	{
 		pWidth = pW;
@@ -41,7 +43,7 @@ public class Ship {
 		direction = 0;
 		body = new Point( pWidth/2, pHeight/2 );
 		sensors = new Sensor[] {new Sensor( 4, -12, this, obs )};
-	}
+	}*/
 	
 	public Ship( int[][] g, int pW, int pH, Obstacles os )
 	{
@@ -60,8 +62,12 @@ public class Ship {
 		}
 		
 		sensorOutput = new ArrayList<Double>();
+		brainInput = new ArrayList<Double>();
 		brainOutput = new ArrayList<Double>();
-		brain = new NeuralNet( sensors.length+2, 3, 1, 2); //check hiddenneurons
+		
+		// NeuralNet constructor: 
+		//	( numInputs, numOutputs, numHiddenLayers, numNeuronsInInputLayer, neuronsPerHiddenLayer )
+		brain = new NeuralNet( sensors.length+2, 3, 1, 4, 3 ); //check hiddenneurons
 	}
 	
 	public void move( int dir )
@@ -110,8 +116,11 @@ public class Ship {
 			}
 			System.out.print( "\n" );
 			
+			brainInput = (ArrayList)sensorOutput.clone();
+			brainInput.add( (double)body.x );
+			brainInput.add( (double)body.y );
 			
-			brainOutput = brain.update( sensorOutput );
+			brainOutput = brain.update( brainInput );
 			
 			System.out.print( "Brain Output: ");
 			for ( int i=0; i < brainOutput.size(); i++ ) {
