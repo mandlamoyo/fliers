@@ -1,8 +1,8 @@
 package neuralnetwork;
 
 public class NeuronLayer {
-	private int numNeurons;
-	private Neuron[] neuronList;
+	public int numNeurons;
+	public Neuron[] neuronList;
 	
 	public NeuronLayer( int numOfNeurons, int numInputsPerNeuron )
 	{

@@ -3,8 +3,8 @@ package neuralnetwork;
 import java.util.Random;
 
 public class Neuron {
-	private int numInputs;
-	private double[] inputWeights;
+	public int numInputs;
+	public double[] inputWeights;
 	private Random r = new Random();
 	
 	public Neuron( int numInp )
