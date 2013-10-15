@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.Random;
+import java.util.ArrayList;
+import neuralnetwork.NeuralNet;
 
 public class Ship {
 	private static final int X = 0;
@@ -20,12 +22,16 @@ public class Ship {
 	private int[] output;
 	private int[][] dirList = {{-1,0},{0,-1},{1,0},{0,1}};
 	private int[][] genome;
+	private ArrayList<Double> brainOutput;
+	private ArrayList<Double> sensorOutput;
+	
 	private Obstacles obs;
 	private Sensor[] sensors;
 	private Point body;
 	
 	private Point velocity;
 	private Random rInt = new Random();
+	private NeuralNet brain;
 	
 	public Ship( int pW, int pH, Obstacles os )
 	{
@@ -52,6 +58,10 @@ public class Ship {
 		for ( int i=0; i < genome.length; i++ ) {
 			sensors[i] = new Sensor( genome[i][X], 0-genome[i][Y], this, obs );
 		}
+		
+		sensorOutput = new ArrayList<Double>();
+		brainOutput = new ArrayList<Double>();
+		brain = new NeuralNet( sensors.length+2, 3, 1, 2); //check hiddenneurons
 	}
 	
 	public void move( int dir )
@@ -89,9 +99,27 @@ public class Ship {
 		}*/
 		
 		//Update velocity
-		if (rInt.nextInt(100) < 20) {
+		if (rInt.nextInt(100) < 10) {
 			if ( rInt.nextInt(2) == 0 ) thrust( LEFT );
 			else thrust( RIGHT );
+			
+			System.out.print( "Sensor Output: " );
+			for ( int i=0; i < sensorOutput.size(); i++ ) {
+				System.out.print( sensorOutput.get(i) );
+				System.out.print( ", " );
+			}
+			System.out.print( "\n" );
+			
+			
+			brainOutput = brain.update( sensorOutput );
+			
+			System.out.print( "Brain Output: ");
+			for ( int i=0; i < brainOutput.size(); i++ ) {
+				System.out.print( brainOutput.get(i) );
+				System.out.print( ", " );
+			}
+			System.out.print( "\n\n" );
+			
 		}
 		
 		if (rInt.nextInt(100) < 20) thrust( rInt.nextInt(4) );
@@ -145,9 +173,14 @@ public class Ship {
 	
 	private void getSensorOutput()
 	{	
+		double normalizedOutput;
+		sensorOutput.clear();
+		
 		for ( int i=0; i< sensors.length; i++ ) {
 			sensors[i].update();
-			output[i] = sensors[i].getState();
+			//output[i] = sensors[i].getState();
+			
+			sensorOutput.add( sensors[i].getState() );
 		}
 	}
 	

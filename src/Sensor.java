@@ -2,7 +2,7 @@ import java.awt.Point;
 
 
 public class Sensor {
-	private static final int OOB = -1;
+	private static final int OOB = 2;
 	private static final int INACTIVE = 0;
 	private static final int ACTIVE = 1;
 	private static final int SIZE = 5;
@@ -54,8 +54,8 @@ public class Sensor {
 		}
 	}
 	
-	public int getState()
-	{	return state; }
+	public double getState()
+	{	return state / 10.0; }
 	
 	public void update()
 	{
