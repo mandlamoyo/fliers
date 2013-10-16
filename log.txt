@@ -4,16 +4,21 @@ Done:
         Add ship sensor infrastucture
         Implement sensors
         Autonomous (random) ship movement
+        Sensor construction from genome
+        Ship neural network (basic)
         
 Doing:
         Autonomous ship movement
-        Sensor construction from genome
+        
         
 To do:
 	Multi-sized bricks (shapes, maps)
 	Ship-brick collision detection
         Ship genotype encoding
         Genotype to Phenotype ship generation
-        Ship neural network
         Ship destruction/fitness recording
-        Ship reproduction
+        Ship genome reproduction
+        
+        Basic neural network evolution
+        Enhanced neural network evolution
+        NEAT framework
