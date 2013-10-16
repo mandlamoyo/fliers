@@ -23,7 +23,6 @@ public class NeuralNet {
 		neuronsInputLayer = neuroInit;
 		neuronsPerHiddenLayer = neuroHidden;
 		
-		bias = -1;
 		outputs = new ArrayList<Double>(); 
 		CreateNet();
 	}
@@ -34,15 +33,16 @@ public class NeuralNet {
 		
 		//Input layer
 		layers[0] = new NeuronLayer( neuronsInputLayer, numInputs );
+		int numInputs = neuronsInputLayer;
 		
 		//Hidden layers
 		for( int i=0; i < numHiddenLayers; i++ ) {
-			int n = (i==0) ? numInputs : neuronsPerHiddenLayer;
-			layers[i+1] = new NeuronLayer( neuronsPerHiddenLayer, n );
+			layers[i+1] = new NeuronLayer( neuronsPerHiddenLayer, numInputs );
+			numInputs = neuronsPerHiddenLayer;
 		}
 		
 		//Output layer
-		layers[layers.length-1] = new NeuronLayer( numOutputs, neuronsInputLayer );
+		layers[layers.length-1] = new NeuronLayer( numOutputs, numInputs );
 		
 		/*
 		if ( numHiddenLayers > 0 ) {
@@ -67,7 +67,18 @@ public class NeuralNet {
 	public ArrayList<Double> GetWeights()
 	{
 		ArrayList<Double> weights = new ArrayList<Double>();
+		ArrayList<Double> buffer = new ArrayList<Double>();
 		
+		for ( int i=0; i < layers.length; i++ ) {
+			buffer = layers[i].getWeights();
+			for ( int j=0; j < buffer.size(); j++ ) {
+				weights.add( buffer.get(j) );
+			}
+		}
+		
+		return weights;
+		
+		/*
 		for ( int i=0; i < layers.length; i++ ) {
 			for ( int j=0; j < layers[i].neuronList.length; j++ ) {
 				for ( int k=0; k < layers[i].neuronList[j].inputWeights.length-1; k++ ) {
@@ -77,6 +88,7 @@ public class NeuralNet {
 		}
 		
 		return weights;
+		*/
 	}
 	
 	public void PutWeights( ArrayList<Double> weights )

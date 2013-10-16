@@ -25,6 +25,7 @@ public class Ship {
 	private ArrayList<Double> brainInput;
 	private ArrayList<Double> brainOutput;
 	private ArrayList<Double> sensorOutput;
+	private ArrayList<Double> weights;
 	
 	private Obstacles obs;
 	private Sensor[] sensors;
@@ -64,6 +65,7 @@ public class Ship {
 		sensorOutput = new ArrayList<Double>();
 		brainInput = new ArrayList<Double>();
 		brainOutput = new ArrayList<Double>();
+		weights = new ArrayList<Double>();
 		
 		// NeuralNet constructor: 
 		//	( numInputs, numOutputs, numHiddenLayers, numNeuronsInInputLayer, neuronsPerHiddenLayer )
@@ -105,7 +107,7 @@ public class Ship {
 		}*/
 		
 		//Update velocity
-		if (rInt.nextInt(100) < 10) {
+		if (rInt.nextInt(100) < 20) {
 			if ( rInt.nextInt(2) == 0 ) thrust( LEFT );
 			else thrust( RIGHT );
 			
@@ -127,6 +129,18 @@ public class Ship {
 				System.out.print( brainOutput.get(i) );
 				System.out.print( ", " );
 			}
+			
+			/* PRINT OUT WEIGHTS
+			System.out.print( "\n" );
+			weights = brain.GetWeights();
+			
+			System.out.print( "Weights: " );
+			for ( int i=0; i < weights.size(); i++ ) {
+				System.out.print( weights.get(i) );
+				System.out.print( ", " );
+			}
+			*/
+			
 			System.out.print( "\n\n" );
 			
 		}

@@ -55,7 +55,7 @@ public class Sensor {
 	}
 	
 	public double getState()
-	{	return state / 10.0; }
+	{	return (double) state; }// / 10.0; }
 	
 	public void update()
 	{

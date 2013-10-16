@@ -54,7 +54,8 @@ public class FlierPanel extends JPanel implements Runnable
 				{-10,5},
 				{-6,11},
 				{0,3},
-				{7,17}
+				{7,17},
+				{12,12}
 		};
 
 		player = new Ship( new int[][] {{-100,15},{-6,41},{0,10},{27,17}}, PWIDTH, PHEIGHT, obs );

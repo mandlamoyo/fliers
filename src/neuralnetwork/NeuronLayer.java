@@ -18,6 +18,20 @@ public class NeuronLayer {
 		}
 	}
 	
+	public ArrayList<Double> getWeights()
+	{
+		ArrayList<Double> weights = new ArrayList<Double>();
+		
+		for ( int i=0; i < numNeurons; i++ ) {
+			double[] neuroWeights = neuronList[i].getWeights();
+			for ( int j=0; j < neuroWeights.length; j++ ) {
+				weights.add( neuroWeights[j] );
+			}
+		}
+		
+		return weights;
+	}
+	
 	public ArrayList<Double> process( ArrayList<Double> inputs )
 	{
 		

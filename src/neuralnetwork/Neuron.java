@@ -13,23 +13,32 @@ public class Neuron {
 	
 	public Neuron( int numInp )
 	{
+		numInputs = numInp;
 		activationResponse = 1;
 		inputWeights = new double[numInputs+1];
+		randomizeWeights();
+	}
+	
+	public double[] getWeights()
+	{ return inputWeights; }
+	
+	private void randomizeWeights()
+	{
 		for ( int i=0; i < inputWeights.length; i++ ) {
 			inputWeights[i] = Math.random();
 			if ( r.nextInt(2) == 1 ) inputWeights[i] *= -1;
 		}
 	}
 	
-	//public double[] getWeights()
-	//{ return inputWeights; }
-	
 	private double sigmoid( double activation, int response )
 	{	return 1/ (1+Math.exp(-activation/response)); }
 	
 	public double calculate( ArrayList<Double> inputs )
 	{
-		if ( inputs.size() != numInputs ) return 0.0;
+		if ( inputs.size() != numInputs ) {
+			System.out.println( inputs.size() + " - " + numInputs );
+			return 0.0;
+		}
 		
 		double netInput = 0;
 		for ( int i=0; i < numInputs; i++ ) {
