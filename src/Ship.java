@@ -69,7 +69,7 @@ public class Ship {
 		
 		// NeuralNet constructor: 
 		//	( numInputs, numOutputs, numHiddenLayers, numNeuronsInInputLayer, neuronsPerHiddenLayer )
-		brain = new NeuralNet( sensors.length+2, 3, 1, 4, 3 ); //check hiddenneurons
+		brain = new NeuralNet( sensors.length, 3, 1, 4, 3 ); //check hiddenneurons
 	}
 	
 	public void move( int dir )
@@ -118,11 +118,14 @@ public class Ship {
 			}
 			System.out.print( "\n" );
 			
+			/*
 			brainInput = (ArrayList)sensorOutput.clone();
-			brainInput.add( (double)body.x );
-			brainInput.add( (double)body.y );
-			
+			brainInput.add( (double)body.x / pWidth );
+			brainInput.add( (double)body.y / pHeight );
 			brainOutput = brain.update( brainInput );
+			*/
+			
+			brainOutput = brain.update( sensorOutput );
 			
 			System.out.print( "Brain Output: ");
 			for ( int i=0; i < brainOutput.size(); i++ ) {

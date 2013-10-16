@@ -35,6 +35,17 @@ public class Neuron {
 	
 	public double calculate( ArrayList<Double> inputs )
 	{
+		
+		//System.out.print( "\n" );
+		/*
+		System.out.print( "Inputs: " );
+		for ( int i=0; i < inputs.size(); i++ ) {
+			System.out.print( inputs.get(i) );
+			System.out.print( ", " );
+		}
+		System.out.print( "\n" );
+		*/
+		
 		if ( inputs.size() != numInputs ) {
 			System.out.println( inputs.size() + " - " + numInputs );
 			return 0.0;
