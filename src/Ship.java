@@ -199,7 +199,6 @@ public class Ship {
 	
 	private void getSensorOutput()
 	{	
-		double normalizedOutput;
 		sensorOutput.clear();
 		
 		for ( int i=0; i< sensors.length; i++ ) {

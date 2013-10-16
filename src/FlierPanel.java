@@ -10,7 +10,9 @@ public class FlierPanel extends JPanel implements Runnable
 {
 	private static final int PWIDTH = 500;
 	private static final int PHEIGHT = 400;
-	
+	private static final int BOX_WIDTH = 32;
+	private static final int BOX_HEIGHT = 32;
+
 	private static final int NUM_FPS = 10;
 	
 	private boolean running = false;
@@ -25,6 +27,7 @@ public class FlierPanel extends JPanel implements Runnable
 	
 	private Fliers flTop;
 	private Obstacles obs;
+	private BlockDropperContainer bdc;
 	private Ship player;
 	private long period;
 	
@@ -49,7 +52,7 @@ public class FlierPanel extends JPanel implements Runnable
 		requestFocus();
 		//readyForTermination();
 		
-		obs = new Obstacles( flTop );
+		obs = new Obstacles( flTop, BOX_WIDTH, BOX_HEIGHT );
 		int[][] spos = new int[][] {
 				{-10,5},
 				{-6,11},
@@ -59,6 +62,7 @@ public class FlierPanel extends JPanel implements Runnable
 		};
 
 		player = new Ship( new int[][] {{-100,15},{-6,41},{0,10},{27,17}}, PWIDTH, PHEIGHT, obs );
+		bdc = new BlockDropperContainer( PWIDTH, BOX_WIDTH, 60, obs ); //( int width, int blockSize, int pd, Obstacles os )
 		
 		addKeyListener( new KeyListener() {
 			
@@ -171,6 +175,7 @@ public class FlierPanel extends JPanel implements Runnable
 	{
 		obs.update();
 		player.update();
+		bdc.update();
 	}
 	
 	private void gameRender()

@@ -3,25 +3,29 @@ import java.util.ArrayList;
 
 
 public class Obstacles {
-	private static final int BOX_WIDTH = 52;
-	private static final int BOX_LENGTH = 32;
+	//private static final int bWidth = 32;
+	//private static final int bHeight = 32;
 	
 	private static final int PWIDTH = 500;
 	private static final int PHEIGHT = 400;
 	
+	private int bWidth;
+	private int bHeight;
 	private ArrayList boxes;
 	private Fliers flTop;
 	private boolean isSelected = false;
 	
-	public Obstacles( Fliers fl )
+	public Obstacles( Fliers fl, int bW, int bH )
 	{
 		boxes = new ArrayList();
 		flTop = fl;
+		bWidth = bW;
+		bHeight = bH;
 	}
 	
 	synchronized public void add( int x, int y )
 	{
-		boxes.add( new Rectangle( x-BOX_WIDTH/2, y-BOX_LENGTH/2, BOX_LENGTH, BOX_LENGTH ));
+		boxes.add( new Rectangle( x-bWidth/2, y-bHeight/2, bWidth, bHeight ));
 		flTop.setScore( boxes.size() );
 	}
 	
@@ -32,7 +36,7 @@ public class Obstacles {
 			for( int i=0; i < boxes.size(); i++) {
 				box = (Rectangle) boxes.get(i);
 				//g.fillRect( box.x, box.y, box.width, box.height );
-				if( x >= box.x && x <= box.x+BOX_WIDTH && y >= box.y && y <= box.y+BOX_LENGTH ) {
+				if( x >= box.x && x <= box.x+bWidth && y >= box.y && y <= box.y+bHeight ) {
 				/*if( (Math.abs( box.x + box.width/2. - x) <= box.width) &&
 						(Math.abs( box.y + box.height/2. - y) <= box.height) ) {*/
 					isSelected = true;
