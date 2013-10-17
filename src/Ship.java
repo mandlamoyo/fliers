@@ -24,7 +24,7 @@ public class Ship {
 	private static final int RADIUS = BODY_SIZE/2;
 	
 	private static final int OOB_PENALTY = 3;
-	private static final int BRICK_PENALTY = 2;
+	private static final int BRICK_PENALTY = 8;
 	
 	// { SENSOR OUTPUT, SENSOR POSITIONS, BRAIN_OUTPUT, BRAIN_WEIGHTS, VELOCITY }
 	private static final int SENSOR_OUT = 0;
@@ -32,7 +32,7 @@ public class Ship {
 	private static final int BRAIN_OUT = 2;
 	private static final int BRAIN_WEIGHTS = 3;
 	private static final int VELOCITY = 4;
-	private static final boolean[] PRINTOUT = { false, false, true, false, false };
+	private static final boolean[] PRINTOUT = { false, false, false, false, false };
 	
 	private static final double ACTIVATION_THRESHOLD = 0.8;
 	private static final int[] BRAIN_OUTPUT_MAG = new int[] { 10, 5, 1 };
@@ -251,7 +251,7 @@ public class Ship {
 		}
 
 		thrust( outputTotal );
-		System.out.println( "Signal: " + outputTotal );
+		//System.out.println( "Signal: " + outputTotal );
 		printOutput();
 		
 		//Cap velocity excess at maximum
@@ -308,6 +308,7 @@ public class Ship {
 				break;
 				
 			default:
+				lifespan -= 4;
 				break;
 		}
 	}
