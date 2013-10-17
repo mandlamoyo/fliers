@@ -139,7 +139,7 @@ public class FlierPanel extends JPanel implements Runnable
 	
 	private void testPress( int x, int y )
 	{
-		if (!isPaused) {
+		/*if (!isPaused) {
 			if ( obs.isSelectedAt(x,y)) {
 				showSelected = true;
 				obs.deSelect();
@@ -147,7 +147,8 @@ public class FlierPanel extends JPanel implements Runnable
 				obs.add(x, y);
 				showSelected = false;
 			}
-		}
+		}*/
+		ships.buildRandom();
 	}
 	
 	public void run()

@@ -14,7 +14,7 @@ public class Ship {
 	
 	private static final int BODY_SIZE = 32;
 	private static final int RADIUS = BODY_SIZE/2;
-	private static final int MAX_VEL = 4;
+	private static final int MAX_VEL = 6;
 	private static final double FRICTION = 0.2;
 	
 	private int pWidth, pHeight;
@@ -102,8 +102,7 @@ public class Ship {
 		
 		//Update velocity
 		if (rInt.nextInt(100) < 20) {
-			if ( rInt.nextInt(2) == 0 ) thrust( LEFT );
-			else thrust( RIGHT );
+			if (rInt.nextInt(100) < 20) thrust( rInt.nextInt(4) );
 			
 			System.out.print( "Sensor Output: " );
 			for ( int i=0; i < sensorOutput.size(); i++ ) {
@@ -138,14 +137,13 @@ public class Ship {
 			}
 			*/
 			
-			System.out.print( "\n\n" );
-			
+			System.out.println( "\nVelocity: (" + velocity.x + "," + velocity.y + ")\n" );
 		}
 		
-		if (rInt.nextInt(100) < 20) thrust( rInt.nextInt(4) );
 		
-		if ( velocity.x > MAX_VEL ) velocity.x = MAX_VEL;
-		if ( velocity.y > MAX_VEL ) velocity.y = MAX_VEL;
+		
+		if ( Math.abs( velocity.x ) > MAX_VEL ) velocity.x = MAX_VEL * velocity.x/Math.abs(velocity.x);
+		if ( Math.abs( velocity.y ) > MAX_VEL ) velocity.y = MAX_VEL * velocity.y/Math.abs(velocity.y);
 		
 		//apply velocity
 		move();
@@ -157,8 +155,6 @@ public class Ship {
 			//body = new Point( pWidth/2, pHeight/2 );
 			//velocity = new Point( 0, 0 );
 		}
-		
-		
 		
 		
 	}
