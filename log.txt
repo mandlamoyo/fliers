@@ -14,14 +14,13 @@ Done:
         Genotype to Phenotype ship generation
         Ship destruction
         Ship-brick collision detection
+        Translation of brain output to movement
+        Variation in fitness based on performance
         
 Doing:
-        Translation of brain output to movement
+        Ship genome reproduction
+        Basic neural network evolution
         
 To do:
-		Variation in fitness based on performance
-        Ship genome reproduction
-        
-        Basic neural network evolution
         Enhanced neural network evolution
         NEAT framework

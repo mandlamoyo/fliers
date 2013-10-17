@@ -8,10 +8,10 @@ import neuralnetwork.NeuralNet;
 public class Ship {
 	private static final int X = 0;
 	private static final int Y = 1;
-	private static final int LEFT = 0;
-	private static final int RIGHT = 1;
-	private static final int UP = 2;
-	private static final int DOWN = 3;
+	private static final int LEFT = 1; //0;
+	private static final int RIGHT = 6; //1;
+	private static final int UP = 5; //2;
+	private static final int DOWN = 10; //3;
 	private static final int ALIVE = -1;
 	
 	private static final int INPUT_NEURONS = 4;
@@ -23,16 +23,19 @@ public class Ship {
 	private static final int BODY_SIZE = 32;
 	private static final int RADIUS = BODY_SIZE/2;
 	
+	private static final int OOB_PENALTY = 3;
+	private static final int BRICK_PENALTY = 2;
+	
 	// { SENSOR OUTPUT, SENSOR POSITIONS, BRAIN_OUTPUT, BRAIN_WEIGHTS, VELOCITY }
 	private static final int SENSOR_OUT = 0;
 	private static final int SENSOR_POS = 1;
 	private static final int BRAIN_OUT = 2;
 	private static final int BRAIN_WEIGHTS = 3;
 	private static final int VELOCITY = 4;
-	private static final boolean[] PRINTOUT = { false, false, false, false, false };
+	private static final boolean[] PRINTOUT = { false, false, true, false, false };
 	
-	private static final int OOB_PENALTY = 3;
-	private static final int BRICK_PENALTY = 2;
+	private static final double ACTIVATION_THRESHOLD = 0.8;
+	private static final int[] BRAIN_OUTPUT_MAG = new int[] { 10, 5, 1 };
 	
 	private int id;
 	private int pWidth, pHeight;
@@ -182,7 +185,7 @@ public class Ship {
 		}
 		
 		if ( PRINTOUT[BRAIN_OUT] == true ) {
-			brainOutput = brain.update( sensorOutput );
+			//brainOutput = brain.update( sensorOutput );
 			
 			System.out.print( "Brain Output: ");
 			for ( int i=0; i < brainOutput.size(); i++ ) {
@@ -226,19 +229,32 @@ public class Ship {
 		//Check life
 		if ( lifespan <= 0 ) return fitness;
 
-		
-		
 		//Update sensors
 		getSensorOutput();
 		
+		/*
 		//Update velocity
 		if (rInt.nextInt(100) < 20) {
 			if (rInt.nextInt(100) < 20) thrust( rInt.nextInt(4) );
 			printOutput();
-			
 		}
+		*/
 		
+		//Update brain with sensor information
+		brainOutput = brain.update( sensorOutput );
 		
+		//Translate brain output to movement
+		int outputTotal = 0;
+		for ( int i=0; i < brainOutput.size(); i++ ) {
+			int active = ( brainOutput.get(i) > ACTIVATION_THRESHOLD ) ? 1 : 0;
+			outputTotal += BRAIN_OUTPUT_MAG[i]*active;
+		}
+
+		thrust( outputTotal );
+		System.out.println( "Signal: " + outputTotal );
+		printOutput();
+		
+		//Cap velocity excess at maximum
 		if ( Math.abs( velocity.x ) > MAX_VEL ) velocity.x = MAX_VEL * velocity.x/Math.abs(velocity.x);
 		if ( Math.abs( velocity.y ) > MAX_VEL ) velocity.y = MAX_VEL * velocity.y/Math.abs(velocity.y);
 		
