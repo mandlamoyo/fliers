@@ -4,8 +4,8 @@ import java.awt.*;
 public class ShipContainer {
 	private static final int X = 0;
 	private static final int Y = 1;
-	private static final int SENSOR_COUNT = 3;
-	private static final int MAX_SENSOR_DISTANCE = 50;
+	private static final int SENSOR_COUNT = 5;
+	private static final int MAX_SENSOR_DISTANCE = 100;
 	
 	private ArrayList<Ship> shipList;
 	private int pWidth;

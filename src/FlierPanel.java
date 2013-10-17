@@ -14,6 +14,7 @@ public class FlierPanel extends JPanel implements Runnable
 	private static final int BOX_HEIGHT = 32;
 
 	private static final int NUM_FPS = 10;
+	private static final int SHIP_COUNT = 1;
 	
 	private boolean running = false;
 	private boolean isPaused = false;
@@ -64,7 +65,7 @@ public class FlierPanel extends JPanel implements Runnable
 
 		//player = new Ship( new int[][] {{-100,15},{-6,41},{0,10},{27,17}}, PWIDTH, PHEIGHT, obs );
 		ships = new ShipContainer( PWIDTH, PHEIGHT, obs );
-		ships.buildShips( 5 );
+		ships.buildShips( SHIP_COUNT );
 		
 		bdc = new BlockDropperContainer( PWIDTH, BOX_WIDTH, 60, obs ); //( int width, int blockSize, int pd, Obstacles os )
 		

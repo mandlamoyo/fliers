@@ -14,8 +14,6 @@ public class Ship {
 	
 	private static final int BODY_SIZE = 32;
 	private static final int RADIUS = BODY_SIZE/2;
-	private static final int MAX_SENSORS = 10;
-	private static final int MAX_SENSOR_DIST = 50;
 	private static final int MAX_VEL = 4;
 	private static final double FRICTION = 0.2;
 	
@@ -31,6 +29,7 @@ public class Ship {
 	private Obstacles obs;
 	private Sensor[] sensors;
 	private Point body;
+	private Point lastPos;
 	
 	private Point velocity;
 	private Random rInt = new Random();
@@ -55,6 +54,8 @@ public class Ship {
 		obs = os;
 		direction = 0;
 		body = new Point( pWidth/2, pHeight/2 );
+		lastPos = new Point( pWidth/2, pHeight/2 );
+		
 		velocity = new Point( 0, 0 );
 		genome = gnme;
 		output = new int[genome.length];
@@ -75,9 +76,8 @@ public class Ship {
 	
 	public void move( int dir )
 	{
-		//body.x += dirList[dir][X];
-		//body.y += dirList[dir][Y];
-		
+		lastPos.x = body.x;
+		lastPos.y = body.y;
 		body.x += velocity.x;
 		body.y += velocity.y;
 	}
@@ -159,8 +159,10 @@ public class Ship {
 		
 		//boundary checking
 		if ( outOfBounds( body.x, body.y ) == true ) {
-			body = new Point( pWidth/2, pHeight/2 );
-			velocity = new Point( 0, 0 );
+			body.x = lastPos.x;
+			body.y = lastPos.y;
+			//body = new Point( pWidth/2, pHeight/2 );
+			//velocity = new Point( 0, 0 );
 		}
 		
 		
@@ -212,10 +214,15 @@ public class Ship {
 	
 	public void draw( Graphics g )
 	{
+		//int MAX_SENSOR_DIST = 100;
+		//g.setColor( Color.yellow );
+		//g.fillOval( body.x-MAX_SENSOR_DIST,  body.y-MAX_SENSOR_DIST, MAX_SENSOR_DIST*2, MAX_SENSOR_DIST*2 );
 		
 		g.setColor( Color.red );
-		g.fillOval( body.x,  body.y,  BODY_SIZE,  BODY_SIZE );
+		g.fillOval( body.x-RADIUS,  body.y-RADIUS,  BODY_SIZE,  BODY_SIZE );
 		
+		g.setColor( Color.blue );
+		g.fillOval( body.x-2, body.y-2, 4, 4 );
 		g.setColor( Color.green );
 		for ( Sensor s: sensors ) {
 			if ( s.state == -1 ) continue;//System.out.println( "OOB" );
