@@ -11,13 +11,13 @@ public class Obstacles {
 	
 	private int bWidth;
 	private int bHeight;
-	private ArrayList boxes;
+	private ArrayList<Rectangle> boxes;
 	private Fliers flTop;
 	private boolean isSelected = false;
 	
 	public Obstacles( Fliers fl, int bW, int bH )
 	{
-		boxes = new ArrayList();
+		boxes = new ArrayList<Rectangle>();
 		flTop = fl;
 		bWidth = bW;
 		bHeight = bH;
@@ -35,10 +35,7 @@ public class Obstacles {
 		if ( boxes.size() > 0 ) {
 			for( int i=0; i < boxes.size(); i++) {
 				box = (Rectangle) boxes.get(i);
-				//g.fillRect( box.x, box.y, box.width, box.height );
 				if( x >= box.x && x <= box.x+bWidth && y >= box.y && y <= box.y+bHeight ) {
-				/*if( (Math.abs( box.x + box.width/2. - x) <= box.width) &&
-						(Math.abs( box.y + box.height/2. - y) <= box.height) ) {*/
 					isSelected = true;
 					return true;
 				}
@@ -53,7 +50,7 @@ public class Obstacles {
 	synchronized public void update()
 	{
 		Rectangle box;
-		ArrayList livingBoxes = new ArrayList();
+		ArrayList<Rectangle> livingBoxes = new ArrayList<Rectangle>();
 		
 		for( int i=0; i < boxes.size(); i++) {
 			box = (Rectangle) boxes.get(i);
@@ -61,8 +58,6 @@ public class Obstacles {
 			
 			if ( box.y < PHEIGHT ) {
 				livingBoxes.add( box );
-			} else {
-				System.out.println( "Box lost!" );
 			}
 		}
 		

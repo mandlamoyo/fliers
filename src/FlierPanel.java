@@ -8,6 +8,11 @@ import java.lang.*;
 
 public class FlierPanel extends JPanel implements Runnable
 {
+	private static final int SPACE = 32;
+	private static final int C_KEY = 67;
+	private static final int LEFT_ARROW = 37;
+	private static final int DOWN_ARROW = 40;
+	
 	private static final int PWIDTH = 500;
 	private static final int PHEIGHT = 400;
 	private static final int BOX_WIDTH = 32;
@@ -80,10 +85,11 @@ public class FlierPanel extends JPanel implements Runnable
 			@Override
 			public void keyPressed( KeyEvent e ) {
 				int kc = e.getKeyCode();
-
-				if ( kc >= 37 && kc <= 40 ) {
-					System.out.println( "Pressed " + (kc-37) );
-					flTop.setDirection( kc-37 );
+				if ( kc == SPACE ) ships.printGenomeScores();
+				if ( kc == C_KEY ) ships.printShipScores();
+				if ( kc >= LEFT_ARROW && kc <= DOWN_ARROW ) {
+					System.out.println( "Pressed " + (kc-LEFT_ARROW) );
+					flTop.setDirection( kc-LEFT_ARROW );
 					//player.move( kc-37 );
 				}
 			}
@@ -139,16 +145,22 @@ public class FlierPanel extends JPanel implements Runnable
 	
 	private void testPress( int x, int y )
 	{
-		/*if (!isPaused) {
-			if ( obs.isSelectedAt(x,y)) {
-				showSelected = true;
-				obs.deSelect();
+		if (!isPaused) {
+			if ( !ships.isSelectedAt(x,y) ) ships.buildRandom();
+		}
+		
+		/*
+		if (!isPaused) {
+			if ( !ships.isSelectedAt(x,y) ) {
+				//showSelected = true;
+				//obs.deSelect();
 			} else {
-				obs.add(x, y);
-				showSelected = false;
+				ships.buildRandom();
+				//obs.add(x, y);
+				//showSelected = false;
 			}
-		}*/
-		ships.buildRandom();
+		}
+		*/
 	}
 	
 	public void run()

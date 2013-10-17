@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.Random;
 import java.util.ArrayList;
+
 import neuralnetwork.NeuralNet;
 
 public class Ship {
@@ -11,48 +12,57 @@ public class Ship {
 	private static final int RIGHT = 1;
 	private static final int UP = 2;
 	private static final int DOWN = 3;
+	private static final int ALIVE = -1;
 	
 	private static final int INPUT_NEURONS = 4;
 	private static final int HIDDEN_NEURONS = 3;
 	private static final int OUTPUT_NEURONS = 3;
 	private static final int HIDDEN_LAYERS = 1;
 	
+	private static final int MAX_VEL = 6;
 	private static final int BODY_SIZE = 32;
 	private static final int RADIUS = BODY_SIZE/2;
-	private static final int MAX_VEL = 6;
-	private static final double FRICTION = 0.2;
 	
-	// { SENSOR OUTPUT, BRAIN_OUTPUT, BRAIN_WEIGHTS, VELOCITY }
+	// { SENSOR OUTPUT, SENSOR POSITIONS, BRAIN_OUTPUT, BRAIN_WEIGHTS, VELOCITY }
 	private static final int SENSOR_OUT = 0;
-	private static final int BRAIN_OUT = 1;
-	private static final int BRAIN_WEIGHTS = 2;
-	private static final int VELOCITY = 3;
-	private static final boolean[] PRINTOUT = { true, true, false, true };
+	private static final int SENSOR_POS = 1;
+	private static final int BRAIN_OUT = 2;
+	private static final int BRAIN_WEIGHTS = 3;
+	private static final int VELOCITY = 4;
+	private static final boolean[] PRINTOUT = { true, false, true, false, true };
 	
+	private int id;
 	private int pWidth, pHeight;
 	private int lifespan;
+	private int fitness;
+	private boolean isSelected;
 	
-	private int[][] genome;
 	private ArrayList<Double> brainOutput;
 	private ArrayList<Double> sensorOutput;
 	
-	private Obstacles obs;
-	private Sensor[] sensors;
 	private Point body;
 	private Point lastPos;
-	
 	private Point velocity;
-	private Random rInt = new Random();
+	private Obstacles obs;
 	private NeuralNet brain;
-
+	private ShipGenome genome;
 	
-	public Ship( int[][] gnme, int pW, int pH, Obstacles os )
+	private Sensor[] sensors;
+	
+	private Random rInt = new Random();
+	
+
+	public Ship( int sid, ShipGenome gnme, int pW, int pH, Obstacles os )
 	{
-		
+		id = sid;
 		obs = os;
 		pWidth = pW;
 		pHeight = pH;
 		genome = gnme;
+		
+		fitness = 0;
+		isSelected = false;
+		lifespan = genome.getLifespan();
 		
 		body = new Point( pWidth/2, pHeight/2 );
 		lastPos = new Point( pWidth/2, pHeight/2 );
@@ -61,14 +71,22 @@ public class Ship {
 		sensorOutput = new ArrayList<Double>();
 		brainOutput = new ArrayList<Double>();
 		
-		sensors = new Sensor[genome.length];
-		for ( int i=0; i < genome.length; i++ ) {
-			sensors[i] = new Sensor( genome[i][X], 0-genome[i][Y], this, obs );
+		int[][] sensorGene = genome.getSensors();
+		sensors = new Sensor[sensorGene.length];
+		for ( int i=0; i < sensorGene.length; i++ ) {
+			sensors[i] = new Sensor( sensorGene[i][X], 0-sensorGene[i][Y], this, obs );
 		}
 		
 		// NeuralNet constructor: 
 		//	( numInputs, numOutputs, numHiddenLayers, numNeuronsInInputLayer, neuronsPerHiddenLayer )
 		brain = new NeuralNet( sensors.length, OUTPUT_NEURONS, HIDDEN_LAYERS, INPUT_NEURONS, HIDDEN_NEURONS );
+		
+		// Either set brain weights to those specified in the genome, or set genome weights to 
+		//	brain's weights (random) if no weights have been specified
+		ArrayList<Double> weights = genome.getWeights();
+		if ( weights.isEmpty() ) genome.setWeights( brain.getWeights() );
+		else brain.setWeights( weights );
+		
 	}
 	
 	public void move()
@@ -86,6 +104,50 @@ public class Ship {
 		return false;
 	}
 	
+	public void select()
+	{	isSelected = true; }
+	
+	public void deselect()
+	{	isSelected = false; }
+	
+	public boolean isSelected()
+	{	return isSelected; }
+	
+	//----- ACCESSOR FUNCTIONS -----//
+	// SET
+	public void setWeights( ArrayList<Double> wghts )
+	{
+		brain.setWeights( wghts );
+		genome.setWeights( wghts );
+	}
+	
+	public void setScore()
+	{	genome.setScore( fitness ); }
+	
+	// GET
+	public int[] getTop()
+	{	return new int[] {body.x+RADIUS, body.y}; }
+	
+	public int[] getOrigin()
+	{	return new int[] {body.x, body.y}; }
+	
+	public int getFitness()
+	{	return fitness; }
+	
+	public int getLifespan()
+	{	return lifespan; }
+	
+	public NeuralNet getBrain()
+	{	return brain; }
+	
+	public ArrayList<Double> getWeights()
+	{	return brain.getWeights(); }
+	
+	public ShipGenome getGenome()
+	{	return genome; }
+	
+	//------------------------------//
+	
 	private void printOutput()
 	{
 		int printed = 0;
@@ -96,6 +158,20 @@ public class Ship {
 			for ( int i=0; i < sensorOutput.size(); i++ ) {
 				System.out.print( sensorOutput.get(i) );
 				System.out.print( ", " );
+			}
+			System.out.print( "\n" );
+			printed++;
+		}
+		
+		if ( PRINTOUT[SENSOR_POS] == true ) {
+			int[][] gene = genome.getSensors();
+			for ( int i=0; i < gene.length; i++ ) {
+				System.out.print( "{" );
+				for ( int j=0; j < 2; j++ ) {
+					System.out.print( gene[i][j] );
+					System.out.print( "," );
+				}
+				System.out.print( "}, " );
 			}
 			System.out.print( "\n" );
 			printed++;
@@ -114,7 +190,7 @@ public class Ship {
 		}
 		
 		if ( PRINTOUT[BRAIN_WEIGHTS] == true ) {
-			ArrayList<Double> weights = brain.GetWeights();
+			ArrayList<Double> weights = brain.getWeights();
 			
 			System.out.print( "Weights: " );
 			for ( int i=0; i < weights.size(); i++ ) {
@@ -130,11 +206,18 @@ public class Ship {
 			printed++;
 		}
 		
-		if ( printed > 0 ) System.out.print( "\n" );
+		if ( printed > 0 ) {
+			System.out.println( "SHIP ID: " + id );
+			System.out.print( "\n" );
+		}
 	}
 	
-	public void update()
+	public int update()
 	{	
+		//Check life
+		if ( lifespan <= 0 ) return fitness;
+
+		
 		//Update sensors
 		getSensorOutput();
 		
@@ -160,7 +243,9 @@ public class Ship {
 			//velocity = new Point( 0, 0 );
 		}
 		
-		
+		fitness++;
+		lifespan--;
+		return ALIVE;
 	}
 	
 	private void thrust( int dir )
@@ -187,10 +272,7 @@ public class Ship {
 		}
 	}
 	
-	public int[] getPos()
-	{
-		return new int[] {body.x+RADIUS, body.y};
-	}
+	
 	
 	private void getSensorOutput()
 	{	
@@ -209,7 +291,8 @@ public class Ship {
 		//g.setColor( Color.yellow );
 		//g.fillOval( body.x-MAX_SENSOR_DIST,  body.y-MAX_SENSOR_DIST, MAX_SENSOR_DIST*2, MAX_SENSOR_DIST*2 );
 		
-		g.setColor( Color.red );
+		if ( isSelected ) g.setColor( Color.yellow );
+		else g.setColor( Color.red );
 		g.fillOval( body.x-RADIUS,  body.y-RADIUS,  BODY_SIZE,  BODY_SIZE );
 		
 		g.setColor( Color.blue );

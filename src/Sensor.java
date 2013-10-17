@@ -29,7 +29,7 @@ public class Sensor {
 	
 	private void updatePos()
 	{
-		int[] ownerPos = owner.getPos();
+		int[] ownerPos = owner.getTop();
 		body.x = ownerPos[0] + relativePos[0];
 		body.y = ownerPos[1] + relativePos[1];
 		

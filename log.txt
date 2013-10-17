@@ -9,19 +9,19 @@ Done:
         Multi-sized bricks (shapes, maps)
         Ship-edge collision detection
         Autonomous ship movement
+        Fitness recording
+        Ship genotype encoding
+        Genotype to Phenotype ship generation
+        Ship destruction
         
 Doing:
         Ship-brick collision detection
-        Fitness recording
         Translation of brain output to movement
         
 To do:
-	Ship genotype encoding
-        Genotype to Phenotype ship generation
-        
+		Variation in fitness based on performance
         Ship genome reproduction
         
         Basic neural network evolution
         Enhanced neural network evolution
-        Ship destruction( ? )
         NEAT framework
