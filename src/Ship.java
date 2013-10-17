@@ -31,6 +31,9 @@ public class Ship {
 	private static final int VELOCITY = 4;
 	private static final boolean[] PRINTOUT = { false, false, false, false, false };
 	
+	private static final int OOB_PENALTY = 3;
+	private static final int BRICK_PENALTY = 2;
+	
 	private int id;
 	private int pWidth, pHeight;
 	private int lifespan;
@@ -246,7 +249,7 @@ public class Ship {
 		if ( outOfBounds( body.x, body.y ) == true ) {
 			body.x = lastPos.x;
 			body.y = lastPos.y;
-			lifespan--;
+			lifespan -= OOB_PENALTY;
 			//body = new Point( pWidth/2, pHeight/2 );
 			//velocity = new Point( 0, 0 );
 		}
@@ -257,7 +260,7 @@ public class Ship {
 		
 		//test collisions
 		if ( obs.checkCollision( boundingBox )) {
-			lifespan--;
+			lifespan -= BRICK_PENALTY;
 			//System.out.println( id + ") Collision!" );
 		}
 		

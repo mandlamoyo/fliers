@@ -78,10 +78,11 @@ public class ShipContainer {
 		System.out.println( "GENOME SCORES: " );
 		
 		for ( int i=0; i < genomeList.size(); i++ ) {
-			ArrayList<Double> weights = genomeList.get(i).getWeights();
-			int score = genomeList.get(i).getScore();
-			
-			System.out.print( "\tScore: " + score + "\n\tWeights: ");
+			ShipGenome g = genomeList.get(i);
+			ArrayList<Double> weights = g.getWeights();
+			int score = g.getScore();
+			double percScore = score/(double)g.getLifespan();
+			System.out.print( "\tScore: " + score + " {" + percScore + "}\n\tWeights: ");
 			for ( int j=0; j < weights.size(); j++ ) {
 				System.out.print( weights.get(j) );
 				System.out.print( ", " );
