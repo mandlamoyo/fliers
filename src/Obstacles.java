@@ -44,6 +44,28 @@ public class Obstacles {
 		return false;
 	}
 	
+	synchronized public ArrayList<Rectangle> inRadius( int x, int y, int radius )
+	{
+		ArrayList<Rectangle> inRange = new ArrayList<Rectangle>();
+		
+		for( int i=0; i < boxes.size(); i++) {
+			Rectangle box = boxes.get(i);
+			if( box.x >= x-radius && box.x <= x+radius && box.y >= y-radius && box.y <= y+radius ) {
+				inRange.add( box );
+			}
+		}
+		return inRange;
+	}
+	
+	synchronized public boolean checkCollision( Rectangle ship )
+	{
+		for( int i=0; i < boxes.size(); i++) {
+			Rectangle box = boxes.get(i);
+			if ( box.intersects( ship )) return true;
+		}
+		return false;
+	}
+	
 	synchronized public void deSelect()
 	{	isSelected = false; }
 	

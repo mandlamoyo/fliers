@@ -13,9 +13,9 @@ Done:
         Ship genotype encoding
         Genotype to Phenotype ship generation
         Ship destruction
+        Ship-brick collision detection
         
 Doing:
-        Ship-brick collision detection
         Translation of brain output to movement
         
 To do:

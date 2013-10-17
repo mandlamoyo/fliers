@@ -29,7 +29,7 @@ public class Ship {
 	private static final int BRAIN_OUT = 2;
 	private static final int BRAIN_WEIGHTS = 3;
 	private static final int VELOCITY = 4;
-	private static final boolean[] PRINTOUT = { true, false, true, false, true };
+	private static final boolean[] PRINTOUT = { false, false, false, false, false };
 	
 	private int id;
 	private int pWidth, pHeight;
@@ -50,7 +50,7 @@ public class Ship {
 	private Sensor[] sensors;
 	
 	private Random rInt = new Random();
-	
+	private Rectangle boundingBox;
 
 	public Ship( int sid, ShipGenome gnme, int pW, int pH, Obstacles os )
 	{
@@ -70,6 +70,7 @@ public class Ship {
 		
 		sensorOutput = new ArrayList<Double>();
 		brainOutput = new ArrayList<Double>();
+		boundingBox = new Rectangle( body.x-BODY_SIZE/2, body.y-BODY_SIZE/2, BODY_SIZE, BODY_SIZE );
 		
 		int[][] sensorGene = genome.getSensors();
 		sensors = new Sensor[sensorGene.length];
@@ -212,11 +213,17 @@ public class Ship {
 		}
 	}
 	
+	private boolean inCollision()
+	{
+		return false;
+	}
+	
 	public int update()
 	{	
 		//Check life
 		if ( lifespan <= 0 ) return fitness;
 
+		
 		
 		//Update sensors
 		getSensorOutput();
@@ -239,9 +246,23 @@ public class Ship {
 		if ( outOfBounds( body.x, body.y ) == true ) {
 			body.x = lastPos.x;
 			body.y = lastPos.y;
+			lifespan--;
 			//body = new Point( pWidth/2, pHeight/2 );
 			//velocity = new Point( 0, 0 );
 		}
+		
+		//update bounding box
+		boundingBox.x = body.x-BODY_SIZE/2;
+		boundingBox.y = body.y-BODY_SIZE/2;
+		
+		//test collisions
+		if ( obs.checkCollision( boundingBox )) {
+			lifespan--;
+			//System.out.println( id + ") Collision!" );
+		}
+		
+		
+		//boundingBox.intersects( box );
 		
 		fitness++;
 		lifespan--;
@@ -290,6 +311,8 @@ public class Ship {
 		//int MAX_SENSOR_DIST = 100;
 		//g.setColor( Color.yellow );
 		//g.fillOval( body.x-MAX_SENSOR_DIST,  body.y-MAX_SENSOR_DIST, MAX_SENSOR_DIST*2, MAX_SENSOR_DIST*2 );
+		g.setColor( Color.black );
+		g.fillRect( boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height );
 		
 		if ( isSelected ) g.setColor( Color.yellow );
 		else g.setColor( Color.red );
