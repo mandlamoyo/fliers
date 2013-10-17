@@ -6,11 +6,11 @@ public class NeuralNet {
 	private int numInputs;
 	private int numOutputs;
 	private int numHiddenLayers;
-	private int activationResponse;
+	//private int activationResponse;
 	private int neuronsInputLayer;
 	private int neuronsPerHiddenLayer;
 	
-	private int bias;
+	//private int bias;
 	private ArrayList<Double> outputs;
 	private NeuronLayer[] layers;
 	
@@ -19,7 +19,7 @@ public class NeuralNet {
 		numInputs = inp;
 		numOutputs = out;
 		numHiddenLayers = hidden;
-		activationResponse = 1;
+		//activationResponse = 1;
 		neuronsInputLayer = neuroInit;
 		neuronsPerHiddenLayer = neuroHidden;
 		

@@ -17,14 +17,11 @@ public class Ship {
 	private static final int MAX_VEL = 4;
 	private static final double FRICTION = 0.2;
 	
-	private int pWidth, pHeight, direction;
-	private int[] output;
-	private int[][] dirList = {{-1,0},{0,-1},{1,0},{0,1}};
+	private int pWidth, pHeight;
+	
 	private int[][] genome;
-	private ArrayList<Double> brainInput;
 	private ArrayList<Double> brainOutput;
 	private ArrayList<Double> sensorOutput;
-	private ArrayList<Double> weights;
 	
 	private Obstacles obs;
 	private Sensor[] sensors;
@@ -52,29 +49,25 @@ public class Ship {
 		pWidth = pW;
 		pHeight = pH;
 		obs = os;
-		direction = 0;
 		body = new Point( pWidth/2, pHeight/2 );
 		lastPos = new Point( pWidth/2, pHeight/2 );
 		
 		velocity = new Point( 0, 0 );
 		genome = gnme;
-		output = new int[genome.length];
 		sensors = new Sensor[genome.length];
 		for ( int i=0; i < genome.length; i++ ) {
 			sensors[i] = new Sensor( genome[i][X], 0-genome[i][Y], this, obs );
 		}
 		
 		sensorOutput = new ArrayList<Double>();
-		brainInput = new ArrayList<Double>();
 		brainOutput = new ArrayList<Double>();
-		weights = new ArrayList<Double>();
 		
 		// NeuralNet constructor: 
 		//	( numInputs, numOutputs, numHiddenLayers, numNeuronsInInputLayer, neuronsPerHiddenLayer )
 		brain = new NeuralNet( sensors.length, 3, 1, 4, 3 ); //check hiddenneurons
 	}
 	
-	public void move( int dir )
+	public void move()
 	{
 		lastPos.x = body.x;
 		lastPos.y = body.y;
@@ -120,7 +113,7 @@ public class Ship {
 			System.out.print( "\n" );
 			
 			/*
-			brainInput = (ArrayList)sensorOutput.clone();
+			ArrayList<Double> brainInput = (ArrayList)sensorOutput.clone();
 			brainInput.add( (double)body.x / pWidth );
 			brainInput.add( (double)body.y / pHeight );
 			brainOutput = brain.update( brainInput );
@@ -136,7 +129,7 @@ public class Ship {
 			
 			/* PRINT OUT WEIGHTS
 			System.out.print( "\n" );
-			weights = brain.GetWeights();
+			ArrayList<Double> weights = brain.GetWeights();
 			
 			System.out.print( "Weights: " );
 			for ( int i=0; i < weights.size(); i++ ) {
@@ -155,7 +148,7 @@ public class Ship {
 		if ( velocity.y > MAX_VEL ) velocity.y = MAX_VEL;
 		
 		//apply velocity
-		move(direction);
+		move();
 		
 		//boundary checking
 		if ( outOfBounds( body.x, body.y ) == true ) {

@@ -9,8 +9,6 @@ public class Sensor {
 	
 	private Point body;
 	public int state;
-	private int id;
-	private int[] stateTypes;
 	private int[] relativePos;
 	private Ship owner;
 	private Obstacles obs;
