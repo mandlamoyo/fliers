@@ -28,7 +28,8 @@ public class FlierPanel extends JPanel implements Runnable
 	private Fliers flTop;
 	private Obstacles obs;
 	private BlockDropperContainer bdc;
-	private Ship player;
+	private ShipContainer ships;
+	//private Ship player;
 	private long period;
 	
 	
@@ -61,7 +62,10 @@ public class FlierPanel extends JPanel implements Runnable
 				{12,12}
 		};
 
-		player = new Ship( new int[][] {{-100,15},{-6,41},{0,10},{27,17}}, PWIDTH, PHEIGHT, obs );
+		//player = new Ship( new int[][] {{-100,15},{-6,41},{0,10},{27,17}}, PWIDTH, PHEIGHT, obs );
+		ships = new ShipContainer( PWIDTH, PHEIGHT, obs );
+		ships.buildShips( 5 );
+		
 		bdc = new BlockDropperContainer( PWIDTH, BOX_WIDTH, 60, obs ); //( int width, int blockSize, int pd, Obstacles os )
 		
 		addKeyListener( new KeyListener() {
@@ -174,7 +178,8 @@ public class FlierPanel extends JPanel implements Runnable
 	private void gameUpdate()
 	{
 		obs.update();
-		player.update();
+		//player.update();
+		ships.update();
 		bdc.update();
 	}
 	
@@ -200,7 +205,8 @@ public class FlierPanel extends JPanel implements Runnable
 		}
 		
 		obs.draw(dbg);
-		player.draw(dbg);
+		ships.draw(dbg);
+		//player.draw(dbg);
 	}
 	
 	//private void gameOverMessage( Graphics g )

@@ -57,6 +57,9 @@ public class Sensor {
 	public double getState()
 	{ return state / 10.0; }
 	
+	public static double getDistance( int x, int y )
+	{	return Math.hypot( Math.abs( (double)x ), Math.abs( (double)y )); }
+	
 	public void update()
 	{
 		updatePos();

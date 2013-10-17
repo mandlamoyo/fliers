@@ -13,8 +13,6 @@ public class Fliers extends JFrame implements WindowListener
 	private JTextField jtfDir;
 	private JTextField jtfTime;
 	
-	
-	
 	public Fliers( long period )
 	{
 		super( "Fliers" );

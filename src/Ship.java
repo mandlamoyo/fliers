@@ -15,6 +15,7 @@ public class Ship {
 	private static final int BODY_SIZE = 32;
 	private static final int RADIUS = BODY_SIZE/2;
 	private static final int MAX_SENSORS = 10;
+	private static final int MAX_SENSOR_DIST = 50;
 	private static final int MAX_VEL = 4;
 	private static final double FRICTION = 0.2;
 	
@@ -46,7 +47,7 @@ public class Ship {
 		sensors = new Sensor[] {new Sensor( 4, -12, this, obs )};
 	}*/
 	
-	public Ship( int[][] g, int pW, int pH, Obstacles os )
+	public Ship( int[][] gnme, int pW, int pH, Obstacles os )
 	{
 		
 		pWidth = pW;
@@ -55,7 +56,7 @@ public class Ship {
 		direction = 0;
 		body = new Point( pWidth/2, pHeight/2 );
 		velocity = new Point( 0, 0 );
-		genome = g;
+		genome = gnme;
 		output = new int[genome.length];
 		sensors = new Sensor[genome.length];
 		for ( int i=0; i < genome.length; i++ ) {
