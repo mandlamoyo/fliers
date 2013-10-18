@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ShipGenome implements Comparable<ShipGenome>{
@@ -99,7 +100,7 @@ public class ShipGenome implements Comparable<ShipGenome>{
 			//by position
 			for ( int j=0; j < sensors[i].length; j++ ) {
 				if ( r.nextInt(100) < CHANCE_OF_MUTATION ) {
-					int newPos = sensors[i][j] + (int) Math.sqrt( r.nextInt( (int)Math.pow( SENSOR_MOVEMENT_RANGE, 2 ))) * (r.nextInt(3)-1);
+					int newPos = sensors[i][j] + (SENSOR_MOVEMENT_RANGE - (int) Math.sqrt( r.nextInt( (int)Math.pow( SENSOR_MOVEMENT_RANGE, 2 )))) * (r.nextInt(3)-1);
 					if ( Sensor.getDistance( newPos, sensors[i][1-j] ) < MAX_SENSOR_DISTANCE ) sensors[i][j] = newPos;
 				}
 			}
@@ -131,18 +132,7 @@ public class ShipGenome implements Comparable<ShipGenome>{
 		int[][] s1 = parent1.getSensors();
 		int[][] s2 = parent2.getSensors();
 		int[][] sc = new int[s2.length][2];
-		
-		
-		/* NEURON -> WEIGHT_RANGE
-		def getRange( neuron, lyrs, wghts ):
-			spread = []
-			for i in range(len(lyrs)):
-				for j in range(lyrs[i]):
-					spread.append(wghts[i])
-			li = spread[:n]
-        	return [sum(li), sum(li)+spread[n]-1]
-		*/
-		
+
 		
 		//Crossover parent weight vectors on neuron input boundaries
 		int[] segments = new int[parent1.getNeuronCount()];
@@ -187,7 +177,7 @@ public class ShipGenome implements Comparable<ShipGenome>{
 				spread.add(wghts[i]);
 			}
 		}
-		ArrayList<Integer> newList = (ArrayList<Integer>) spread.subList( 0, neuron );
+		List<Integer> newList = spread.subList( 0, neuron );
 		
 		for ( int i=0; i < newList.size(); i++ ) sum += newList.get(i);
 		return new int[] {sum, sum+spread.get(neuron)};

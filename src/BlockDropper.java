@@ -15,7 +15,8 @@ public class BlockDropper {
 		obs = os;
 		r = new Random();
 		body = new Point( x, y );
-		blockThreshold = r.nextInt( freq );
+		//blockThreshold = r.nextInt( freq );
+		blockThreshold = (int) Math.sqrt( r.nextInt( (int)Math.pow( freq, 2 )));
 	}
 	
 	private void perturbThreshold()

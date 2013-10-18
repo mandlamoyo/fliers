@@ -16,10 +16,11 @@ Done:
         Ship-brick collision detection
         Translation of brain output to movement
         Variation in fitness based on performance
-        
-Doing:
         Ship genome reproduction
         Basic neural network evolution
+        
+Doing:
+        Elitism
         
 To do:
         Enhanced neural network evolution

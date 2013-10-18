@@ -14,6 +14,7 @@ public class Ship {
 	private static final int DOWN = 10; //3;
 	private static final int ALIVE = -1;
 	
+	private static final int SENSOR_COUNT = 6;
 	private static final int INPUT_NEURONS = 4;
 	private static final int HIDDEN_NEURONS = 3;
 	private static final int OUTPUT_NEURONS = 3;
@@ -32,7 +33,7 @@ public class Ship {
 	private static final int BRAIN_OUT = 2;
 	private static final int BRAIN_WEIGHTS = 3;
 	private static final int VELOCITY = 4;
-	private static final boolean[] PRINTOUT = { true, false, true, true, false };
+	private static final boolean[] PRINTOUT = { false, false, false, false, false };
 	
 	private static final double ACTIVATION_THRESHOLD = 0.8;
 	private static final int[] BRAIN_OUTPUT_MAG = new int[] { 10, 5, 1 };
@@ -264,12 +265,12 @@ public class Ship {
 		//Print output
 		if (rInt.nextInt(100) < 20) {
 			//if (rInt.nextInt(100) < 20) thrust( rInt.nextInt(4) );
-			System.out.println( "Signal: " + outputTotal );
+			//System.out.println( "Signal: " + outputTotal );
 			printOutput();
 			
-			genome.mutate();
-			brain.setWeights( genome.getWeights() );
-			buildSensors();
+			//genome.mutate();
+			//brain.setWeights( genome.getWeights() );
+			//buildSensors();
 		}
 		
 		//Cap velocity excess at maximum
@@ -341,6 +342,14 @@ public class Ship {
 			sensors[i].update();
 			sensorOutput.add( sensors[i].getState() );
 		}
+	}
+	
+	public static int[][] getBrainStructure()
+	{
+		//neuronsPerLayer - [INPUT,HIDDEN,OUTPUT]
+		//weightsPerLayer - [SENSORS,INPUT,HIDDEN]
+		return new int[][] {{ INPUT_NEURONS, HIDDEN_NEURONS, OUTPUT_NEURONS },
+							{ SENSOR_COUNT, INPUT_NEURONS, HIDDEN_NEURONS }};
 	}
 	
 	public void draw( Graphics g )

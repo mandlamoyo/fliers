@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class BlockDropperContainer {
-	private static final int FREQ_THRESHOLD = 50;
+	private static final int FREQ_THRESHOLD = 70;
 	
 	private BlockDropper[] droppers;
 	private int numBlocks;

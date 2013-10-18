@@ -6,15 +6,18 @@ public class ShipContainer {
 	private static final int X = 0;
 	private static final int Y = 1;
 	private static final int ALIVE = -1;
+	private static final int NEURONS = 0;
+	private static final int WEIGHTS = 1;
 	private static final int SENSOR_COUNT = 5;
 	private static final int MAX_POP_SIZE = 100;
 	private static final int SHIP_BODY_SIZE = 32;
-	private static final int DEFAULT_LIFESPAN = 10000;
+	private static final int DEFAULT_LIFESPAN = 1000;
 	private static final int MAX_SENSOR_DISTANCE = 100;
 	private static final int MIN_GENOME_COLLECTION_SIZE = 50;
 	private static final int MAX_GENOME_COLLECTION_SIZE = 200;
 	
 	private static final int CHANCE_MUTATION = 15; //Out of 100
+	private static final int MAX_GENOME_PRINTOUT = 20;
 	
 	private int pWidth;
 	private int pHeight;
@@ -80,7 +83,8 @@ public class ShipContainer {
 	public void buildFromGenomes()
 	{
 		if ( genomeList.size() > MIN_GENOME_COLLECTION_SIZE && shipList.size() < MAX_POP_SIZE ) {
-			ShipGenome genome = ShipGenome.crossover( genomeList );
+			int[][] layerInfo = Ship.getBrainStructure();
+			ShipGenome genome = ShipGenome.crossover( genomeList, layerInfo[NEURONS], layerInfo[WEIGHTS] );
 			genome.mutate();
 			buildShip( genome );
 		}
@@ -111,7 +115,7 @@ public class ShipContainer {
 		Collections.sort( genomeList );
 		System.out.println( "GENOME SCORES: " );
 		
-		for ( int i=0; i < genomeList.size(); i++ ) {
+		for ( int i=0; i < Math.min( genomeList.size(), MAX_GENOME_PRINTOUT ); i++ ) {
 			ShipGenome g = genomeList.get(i);
 			ArrayList<Double> weights = g.getWeights();
 			int score = g.getScore();
@@ -136,6 +140,15 @@ public class ShipContainer {
 	
 	public void update()
 	{
+		//Fill up population in appropriate manner
+		if ( shipList.size() < MAX_POP_SIZE && genomeList.size() < MIN_GENOME_COLLECTION_SIZE ) {
+			buildRandom();
+		} else if ( shipList.size() < MAX_POP_SIZE ) {
+			buildFromGenomes();
+		}
+		
+		
+		//Remove dead ships from active population
 		ArrayList<Ship> buffer = new ArrayList<Ship>();
 		
 		for ( int i=0; i < shipList.size(); i++ ) {
@@ -146,7 +159,11 @@ public class ShipContainer {
 				
 			} else {
 				s.setScore();
-				genomeList.add( s.getGenome() );
+				if ( genomeList.size() < MAX_GENOME_COLLECTION_SIZE ) genomeList.add( s.getGenome() );
+				else {
+					Collections.sort( genomeList );
+					if ( s.getFitness() > genomeList.get( genomeList.size()-1 ).getScore() ) genomeList.set( genomeList.size()-1, s.getGenome() );
+				}
 			}
 		}
 		
