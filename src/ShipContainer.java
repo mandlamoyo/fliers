@@ -1,18 +1,28 @@
 import java.util.*;
 import java.awt.*;
+import neuralnetwork.NeuralNet;
 
 public class ShipContainer {
 	private static final int X = 0;
 	private static final int Y = 1;
 	private static final int ALIVE = -1;
-	private static final int SHIP_BODY_SIZE = 32;
 	private static final int SENSOR_COUNT = 5;
+	private static final int MAX_POP_SIZE = 100;
+	private static final int SHIP_BODY_SIZE = 32;
 	private static final int DEFAULT_LIFESPAN = 10000;
 	private static final int MAX_SENSOR_DISTANCE = 100;
+	private static final int MIN_GENOME_COLLECTION_SIZE = 50;
+	private static final int MAX_GENOME_COLLECTION_SIZE = 200;
+	
+	private static final int CHANCE_MUTATION = 15; //Out of 100
 	
 	private int pWidth;
 	private int pHeight;
 	private int shipIds;
+	
+	private int activeShips;
+	private int shipsFromGenomes;
+	private int totalShipsCreated;
 	
 	private Obstacles obs;
 	private Random r;
@@ -66,11 +76,31 @@ public class ShipContainer {
 		buildShip( genome );
 	}
 	
+	public void buildFromGenomes()
+	{
+		if ( genomeList.size() > MIN_GENOME_COLLECTION_SIZE ) {
+			ShipGenome genome = crossover( genomeList );
+			genome.mutate();
+		}
+	}
+	
 	public void buildShips( int n )
 	{
 		for ( int i=0; i < n; i++ ) buildRandom();
 	}
 	
+	public static ShipGenome crossover( ArrayList<ShipGenome> genomes )
+	{
+		//take two from genomes (biased to higher scores)
+		//take some of first's genes, some of second's
+		Random r = new Random();
+		int range = genomes.size();
+		ShipGenome parent1 = genomes.get( (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))));
+		ShipGenome parent2 = genomes.get( (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))));
+		
+		//Implement the actual crossover (and move this code to outer "getOffspring" function?)
+		return new ShipGenome( parent1.getSensors(), DEFAULT_LIFESPAN );
+	}
 	
 	public void printGenomeScores()
 	{
