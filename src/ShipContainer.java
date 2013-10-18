@@ -92,6 +92,7 @@ public class ShipContainer {
 	public void buildFromGenomes()
 	{
 		if ( genomeList.size() > MIN_GENOME_COLLECTION_SIZE && shipList.size() < MAX_POP_SIZE ) {
+		//if ( shipList.size() < MAX_POP_SIZE ) {
 			int[][] layerInfo = Ship.getBrainStructure();
 			ShipGenome genome = ShipGenome.crossover( genomeList, layerInfo[NEURONS], layerInfo[WEIGHTS] );
 			genome.mutate();
@@ -104,24 +105,23 @@ public class ShipContainer {
 		for ( int i=0; i < n; i++ ) buildRandom();
 	}
 	
-	/*
-	public static ShipGenome crossover( ArrayList<ShipGenome> genomes )
+	
+	private void populateGenomeList()
 	{
-		//take two from genomes (biased to higher scores)
-		//take some of first's genes, some of second's
-		Random r = new Random();
-		int range = genomes.size();
-		ShipGenome parent1 = genomes.get( (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))));
-		ShipGenome parent2 = genomes.get( (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))));
-		
-		//Implement the actual crossover (and move this code to outer "getOffspring" function?)
-		return new ShipGenome( parent1.getSensors(), DEFAULT_LIFESPAN );
+		while ( genomeList.size() < MAX_GENOME_COLLECTION_SIZE ) genomeList.add( new ShipGenome( SENSOR_COUNT, DEFAULT_LIFESPAN, gid_counter ));
 	}
-	*/
+	
 	
 	public void printGenomeScores()
 	{
 		Collections.sort( genomeList );
+		System.out.print( "SCORELIST { " );
+		for ( int i=0; i < genomeList.size(); i++ ) {
+			System.out.print( genomeList.get(i).getScore() + ", " );
+		}
+		System.out.print( "}\n" );
+		
+		/*Collections.sort( genomeList );
 		System.out.println( "GENOME SCORES: " );
 		System.out.println( "CURRENT BEST: ");
 		
@@ -147,7 +147,7 @@ public class ShipContainer {
 				System.out.print( ", " );
 			}
 			System.out.print( "\n\n" );
-		}
+		}*/
 	}
 	
 	public void printShipScores()
@@ -177,7 +177,12 @@ public class ShipContainer {
 			}
 			//shipList.remove( r.nextInt(shipList.size()) );
 			//shipList.remove( r.nextInt(shipList.size()) );
+			
+			
 		}
+		
+		
+		
 		
 		//Fill up population in appropriate manner
 		if ( start > DELAY ) {

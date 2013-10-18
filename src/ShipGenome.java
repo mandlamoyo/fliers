@@ -65,6 +65,7 @@ public class ShipGenome implements Comparable<ShipGenome>{
 
 	//------------------------------//
 
+	
 	private int[][] getSensorGene( int numSensors )
 	{
 		int[][] gene = new int[numSensors][2];
@@ -129,11 +130,11 @@ public class ShipGenome implements Comparable<ShipGenome>{
 		
 		// total-sqrt ->   0 BIAS <- 	   TOTAL
 		// sqrt 	  ->   0	   -> BIAS TOTAL
-		int v1 = range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 )));
-		int v2 = range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 )));
+		int v1 = Math.min( range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))), genomes.size()-1 ); 
+		int v2 = Math.min( range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))), genomes.size()-1 );
 		
 		if ( r.nextInt(50) < 5 ) v1 = 0;
-		if ( r.nextInt(50) < 5 ) v1 = r.nextInt(10);
+		if ( r.nextInt(50) < 5 ) v1 = Math.min( r.nextInt(10),  genomes.size()-1 );
 		ShipGenome parent1 = genomes.get( v1 );
 		ShipGenome parent2 = genomes.get( v2 );
 		
