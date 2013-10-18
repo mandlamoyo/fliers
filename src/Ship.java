@@ -78,11 +78,14 @@ public class Ship {
 		brainOutput = new ArrayList<Double>();
 		boundingBox = new Rectangle( body.x-BODY_SIZE/2, body.y-BODY_SIZE/2, BODY_SIZE, BODY_SIZE );
 		
+		/*
 		int[][] sensorGene = genome.getSensors();
 		sensors = new Sensor[sensorGene.length];
 		for ( int i=0; i < sensorGene.length; i++ ) {
 			sensors[i] = new Sensor( sensorGene[i][X], 0-sensorGene[i][Y], this, obs );
 		}
+		*/
+		buildSensors();
 		
 		// NeuralNet constructor: 
 		//	( numInputs, numOutputs, numHiddenLayers, numNeuronsInInputLayer, neuronsPerHiddenLayer )
@@ -94,6 +97,15 @@ public class Ship {
 		if ( weights.isEmpty() ) genome.setWeights( brain.getWeights() );
 		else brain.setWeights( weights );
 		
+	}
+	
+	private void buildSensors()
+	{
+		int[][] sensorGene = genome.getSensors();
+		sensors = new Sensor[sensorGene.length];
+		for ( int i=0; i < sensorGene.length; i++ ) {
+			sensors[i] = new Sensor( sensorGene[i][X], 0-sensorGene[i][Y], this, obs );
+		}
 	}
 	
 	public void move()
@@ -257,6 +269,7 @@ public class Ship {
 			
 			genome.mutate();
 			brain.setWeights( genome.getWeights() );
+			buildSensors();
 		}
 		
 		//Cap velocity excess at maximum

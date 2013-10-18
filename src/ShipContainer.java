@@ -41,7 +41,7 @@ public class ShipContainer {
 		//scoredWeightsList = new ArrayList<ScoredWeights>();
 	}
 	
-	
+	/*
 	private int[][] getSensorGene( int numSensors )
 	{
 		int[][] gene = new int[numSensors][2];
@@ -63,6 +63,7 @@ public class ShipContainer {
 		
 		return gene;
 	}
+	*/
 	
 	public void buildShip( ShipGenome gnme )
 	{	
@@ -72,14 +73,14 @@ public class ShipContainer {
 	
 	public void buildRandom()
 	{	
-		ShipGenome genome = new ShipGenome( getSensorGene( SENSOR_COUNT ), DEFAULT_LIFESPAN );
+		ShipGenome genome = new ShipGenome( SENSOR_COUNT, DEFAULT_LIFESPAN );
 		buildShip( genome );
 	}
 	
 	public void buildFromGenomes()
 	{
 		if ( genomeList.size() > MIN_GENOME_COLLECTION_SIZE ) {
-			ShipGenome genome = crossover( genomeList );
+			ShipGenome genome = ShipGenome.crossover( genomeList );
 			genome.mutate();
 		}
 	}
@@ -89,6 +90,7 @@ public class ShipContainer {
 		for ( int i=0; i < n; i++ ) buildRandom();
 	}
 	
+	/*
 	public static ShipGenome crossover( ArrayList<ShipGenome> genomes )
 	{
 		//take two from genomes (biased to higher scores)
@@ -101,6 +103,7 @@ public class ShipContainer {
 		//Implement the actual crossover (and move this code to outer "getOffspring" function?)
 		return new ShipGenome( parent1.getSensors(), DEFAULT_LIFESPAN );
 	}
+	*/
 	
 	public void printGenomeScores()
 	{
