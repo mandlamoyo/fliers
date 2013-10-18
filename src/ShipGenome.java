@@ -5,9 +5,9 @@ import java.util.Random;
 public class ShipGenome implements Comparable<ShipGenome>{
 	private static final int X = 0;
 	private static final int Y = 1;
-	private static final int CHANCE_OF_MUTATION = 40; //out of 100 (actually 2/3 of this value)
+	private static final int CHANCE_OF_MUTATION = 50; //out of 100 (actually 2/3 of this value)
 	private static final int SENSOR_MOVEMENT_RANGE = 10;
-	private static final int MAX_SENSOR_DISTANCE = 100;
+	private static final int MAX_SENSOR_DISTANCE = 50;
 	
 	private Random r;
 	private int score;

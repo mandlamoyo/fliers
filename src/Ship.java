@@ -14,7 +14,7 @@ public class Ship {
 	private static final int DOWN = 10; //3;
 	private static final int ALIVE = -1;
 	
-	private static final int SENSOR_COUNT = 6;
+	private static final int SENSOR_COUNT = 8;
 	private static final int INPUT_NEURONS = 4;
 	private static final int HIDDEN_NEURONS = 3;
 	private static final int OUTPUT_NEURONS = 3;
@@ -24,8 +24,8 @@ public class Ship {
 	private static final int BODY_SIZE = 32;
 	private static final int RADIUS = BODY_SIZE/2;
 	
-	private static final int OOB_PENALTY = 3;
-	private static final int BRICK_PENALTY = 8;
+	private static final int OOB_PENALTY = 10;
+	private static final int BRICK_PENALTY = 50;
 	
 	// { SENSOR OUTPUT, SENSOR POSITIONS, BRAIN_OUTPUT, BRAIN_WEIGHTS, VELOCITY }
 	private static final int SENSOR_OUT = 0;
@@ -281,7 +281,7 @@ public class Ship {
 		move();
 		
 		//boundary checking
-		if ( outOfBounds( body.x, body.y ) == true ) {
+		if ( outOfBounds( body.x-RADIUS, body.y ) == true || outOfBounds( body.x+RADIUS, body.y ) == true ) {
 			body.x = lastPos.x;
 			body.y = lastPos.y;
 			lifespan -= OOB_PENALTY;

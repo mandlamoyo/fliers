@@ -8,10 +8,10 @@ public class ShipContainer {
 	private static final int ALIVE = -1;
 	private static final int NEURONS = 0;
 	private static final int WEIGHTS = 1;
-	private static final int SENSOR_COUNT = 5;
+	private static final int SENSOR_COUNT = 8;
 	private static final int MAX_POP_SIZE = 100;
 	private static final int SHIP_BODY_SIZE = 32;
-	private static final int DEFAULT_LIFESPAN = 1000;
+	private static final int DEFAULT_LIFESPAN = 5000;
 	private static final int MAX_SENSOR_DISTANCE = 100;
 	private static final int MIN_GENOME_COLLECTION_SIZE = 50;
 	private static final int MAX_GENOME_COLLECTION_SIZE = 200;

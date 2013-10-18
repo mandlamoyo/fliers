@@ -1,7 +1,7 @@
 import java.util.Random;
 
 public class BlockDropperContainer {
-	private static final int FREQ_THRESHOLD = 70;
+	private static final int FREQ_THRESHOLD = 40;
 	
 	private BlockDropper[] droppers;
 	private int numBlocks;
@@ -19,9 +19,11 @@ public class BlockDropperContainer {
 		count = 0;
 		
 		for ( int i=0; i < numBlocks; i++ ) {
+			boolean barrier = false;
 			int freq = r.nextInt( FREQ_THRESHOLD );
 			if (freq < 1) freq = 1;
-			droppers[i] = new BlockDropper( i*blockSize + blockSize/2, 0, freq, os );
+			if ( i == 0 || i == numBlocks-1 || i == numBlocks/2 ) barrier = true;
+			droppers[i] = new BlockDropper( i*blockSize + blockSize/2, 0, freq, barrier, os );
 		}
 		
 	}

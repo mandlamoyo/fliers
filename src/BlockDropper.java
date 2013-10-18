@@ -10,9 +10,12 @@ public class BlockDropper {
 	private Random r;
 	private Obstacles obs;
 	
-	public BlockDropper( int x, int y, int freq, Obstacles os )
+	private boolean barrier;
+	
+	public BlockDropper( int x, int y, int freq, boolean barr, Obstacles os )
 	{
 		obs = os;
+		barrier = barr;
 		r = new Random();
 		body = new Point( x, y );
 		//blockThreshold = r.nextInt( freq );
@@ -28,10 +31,14 @@ public class BlockDropper {
 	
 	public void update()
 	{
-		if ( r.nextInt(100) < blockThreshold ) {
+		if ( barrier ) {//&& r.nextBoolean()) {
 			obs.add( body.x, body.y );
-		}
+		} else {
+			if ( r.nextInt(100) < blockThreshold ) {
+				obs.add( body.x, body.y );
+			}
 		
-		if ( r.nextInt(100) < 5 ) perturbThreshold();
+			if ( r.nextInt(100) < 5 ) perturbThreshold();
+		}
 	}
 }
