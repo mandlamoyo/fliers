@@ -1,15 +1,17 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Collections;
 
 public class ShipGenome implements Comparable<ShipGenome>{
 	private static final int X = 0;
 	private static final int Y = 1;
-	private static final int CHANCE_OF_MUTATION = 50; //out of 100 (actually 2/3 of this value)
+	private static final int CHANCE_OF_MUTATION = 40; //out of 100 (actually 2/3 of this value)
 	private static final int SENSOR_MOVEMENT_RANGE = 10;
-	private static final int MAX_SENSOR_DISTANCE = 50;
+	private static final int MAX_SENSOR_DISTANCE = 70;
 	
 	private Random r;
+	public int gid;
 	private int score;
 	private int lifespan;
 	private int neuronCount;
@@ -17,10 +19,11 @@ public class ShipGenome implements Comparable<ShipGenome>{
 	private ArrayList<Double> weights;
 	
 	
-	public ShipGenome( int numSensors, int life )
+	public ShipGenome( int numSensors, int life, int id )
 	{
 		r = new Random();
 		
+		gid = id;
 		score = 0;
 		lifespan = life;
 		sensors = getSensorGene( numSensors );
@@ -121,8 +124,20 @@ public class ShipGenome implements Comparable<ShipGenome>{
 		//take some of first's genes, some of second's
 		Random r = new Random();
 		int range = genomes.size();
-		ShipGenome parent1 = genomes.get( (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))));
-		ShipGenome parent2 = genomes.get( (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))));
+		//System.out.println( "RANGE: " + range );
+		Collections.sort( genomes );
+		
+		// total-sqrt ->   0 BIAS <- 	   TOTAL
+		// sqrt 	  ->   0	   -> BIAS TOTAL
+		int v1 = range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 )));
+		int v2 = range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 )));
+		
+		if ( r.nextInt(50) < 5 ) v1 = 0;
+		if ( r.nextInt(50) < 5 ) v1 = r.nextInt(10);
+		ShipGenome parent1 = genomes.get( v1 );
+		ShipGenome parent2 = genomes.get( v2 );
+		
+		//System.out.println( v1 + ", " + v2 );
 		
 		//Crossover to create new
 		ArrayList<Double> w1 = parent1.getWeights();
@@ -151,7 +166,8 @@ public class ShipGenome implements Comparable<ShipGenome>{
 			else sc[i] = s2[i].clone();
 		}
 		
-		ShipGenome child =  new ShipGenome( parent1.sensors.length, parent2.lifespan );
+		ShipGenome child =  new ShipGenome( parent1.sensors.length, parent2.lifespan, ShipContainer.gid_counter );
+		ShipContainer.gid_counter++;
 		child.setWeights( wc );
 		child.setSensors( sc );
 		return child;

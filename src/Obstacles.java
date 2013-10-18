@@ -6,8 +6,8 @@ public class Obstacles {
 	//private static final int bWidth = 32;
 	//private static final int bHeight = 32;
 	
-	private static final int PWIDTH = 500;
-	private static final int PHEIGHT = 400;
+	private static final int PWIDTH = 800; //500;
+	private static final int PHEIGHT = 700; //400;
 	
 	private int bWidth;
 	private int bHeight;

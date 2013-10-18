@@ -18,8 +18,8 @@ public class BlockDropper {
 		barrier = barr;
 		r = new Random();
 		body = new Point( x, y );
-		//blockThreshold = r.nextInt( freq );
-		blockThreshold = (int) Math.sqrt( r.nextInt( (int)Math.pow( freq, 2 )));
+		blockThreshold = r.nextInt( freq );
+		//blockThreshold = (int) Math.sqrt( r.nextInt( (int)Math.pow( freq, 2 )));
 	}
 	
 	private void perturbThreshold()
@@ -38,7 +38,7 @@ public class BlockDropper {
 				obs.add( body.x, body.y );
 			}
 		
-			if ( r.nextInt(100) < 5 ) perturbThreshold();
+			//if ( r.nextInt(100) < 5 ) perturbThreshold();
 		}
 	}
 }

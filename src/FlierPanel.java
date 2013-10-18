@@ -13,8 +13,8 @@ public class FlierPanel extends JPanel implements Runnable
 	private static final int LEFT_ARROW = 37;
 	private static final int DOWN_ARROW = 40;
 	
-	private static final int PWIDTH = 500;
-	private static final int PHEIGHT = 400;
+	private static final int PWIDTH = 800; //500;
+	private static final int PHEIGHT = 700; //400;
 	private static final int BOX_WIDTH = 32;
 	private static final int BOX_HEIGHT = 32;
 
@@ -70,7 +70,7 @@ public class FlierPanel extends JPanel implements Runnable
 
 		//player = new Ship( new int[][] {{-100,15},{-6,41},{0,10},{27,17}}, PWIDTH, PHEIGHT, obs );
 		ships = new ShipContainer( PWIDTH, PHEIGHT, obs );
-		ships.buildShips( SHIP_COUNT );
+		//ships.buildShips( SHIP_COUNT );
 		
 		bdc = new BlockDropperContainer( PWIDTH, BOX_WIDTH, 60, obs ); //( int width, int blockSize, int pd, Obstacles os )
 		

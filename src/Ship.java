@@ -15,8 +15,8 @@ public class Ship {
 	private static final int ALIVE = -1;
 	
 	private static final int SENSOR_COUNT = 8;
-	private static final int INPUT_NEURONS = 4;
-	private static final int HIDDEN_NEURONS = 3;
+	private static final int INPUT_NEURONS = 7;
+	private static final int HIDDEN_NEURONS = 5;
 	private static final int OUTPUT_NEURONS = 3;
 	private static final int HIDDEN_LAYERS = 1;
 	
@@ -24,8 +24,8 @@ public class Ship {
 	private static final int BODY_SIZE = 32;
 	private static final int RADIUS = BODY_SIZE/2;
 	
-	private static final int OOB_PENALTY = 10;
-	private static final int BRICK_PENALTY = 50;
+	private static final int OOB_PENALTY = 40;
+	private static final int BRICK_PENALTY = 60;
 	
 	// { SENSOR OUTPUT, SENSOR POSITIONS, BRAIN_OUTPUT, BRAIN_WEIGHTS, VELOCITY }
 	private static final int SENSOR_OUT = 0;
@@ -327,7 +327,7 @@ public class Ship {
 				break;
 				
 			default:
-				lifespan -= 4;
+				lifespan -= 40;
 				break;
 		}
 	}
