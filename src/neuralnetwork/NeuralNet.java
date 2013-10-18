@@ -27,6 +27,15 @@ public class NeuralNet {
 		createNet();
 	}
 	
+	public int getNeuronCount()
+	{	
+		int total = 0;
+		for ( NeuronLayer nl : layers ) {
+			total += nl.numNeurons;
+		}
+		return total;
+	}
+	
 	private void createNet()
 	{
 		layers = new NeuronLayer[numHiddenLayers+2];

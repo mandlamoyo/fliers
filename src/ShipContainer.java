@@ -79,9 +79,10 @@ public class ShipContainer {
 	
 	public void buildFromGenomes()
 	{
-		if ( genomeList.size() > MIN_GENOME_COLLECTION_SIZE ) {
+		if ( genomeList.size() > MIN_GENOME_COLLECTION_SIZE && shipList.size() < MAX_POP_SIZE ) {
 			ShipGenome genome = ShipGenome.crossover( genomeList );
 			genome.mutate();
+			buildShip( genome );
 		}
 	}
 	

@@ -11,6 +11,7 @@ public class ShipGenome implements Comparable<ShipGenome>{
 	private Random r;
 	private int score;
 	private int lifespan;
+	private int neuronCount;
 	private int[][] sensors;
 	private ArrayList<Double> weights;
 	
@@ -32,6 +33,13 @@ public class ShipGenome implements Comparable<ShipGenome>{
 	public void setWeights( ArrayList<Double> wghts )
 	{	weights = (ArrayList<Double>) wghts.clone(); }
 	
+	public void setSensors( int[][] snsrs )
+	{
+		sensors = snsrs;
+	}
+	
+	public void setNeuronCount( int nc )
+	{	neuronCount = nc; }
 	
 	// GET
 	public int getScore()
@@ -39,6 +47,9 @@ public class ShipGenome implements Comparable<ShipGenome>{
 	
 	public int getLifespan()
 	{	return lifespan; }
+	
+	public int getNeuronCount()
+	{	return neuronCount; }
 	
 	public int[][] getSensors()
 	{	return sensors.clone(); }
@@ -103,7 +114,7 @@ public class ShipGenome implements Comparable<ShipGenome>{
 		
 	}
 	
-	public static ShipGenome crossover( ArrayList<ShipGenome> genomes )
+	public static ShipGenome crossover( ArrayList<ShipGenome> genomes, int[] neuronsPerLayer, int[] weightsPerLayer )
 	{
 		//take two from genomes (biased to higher scores)
 		//take some of first's genes, some of second's
@@ -112,8 +123,74 @@ public class ShipGenome implements Comparable<ShipGenome>{
 		ShipGenome parent1 = genomes.get( (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))));
 		ShipGenome parent2 = genomes.get( (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))));
 		
-		//Implement the actual crossover (and move this code to outer "getOffspring" function?)
-		return new ShipGenome( parent1.sensors.length, parent2.lifespan );
+		//Crossover to create new
+		ArrayList<Double> w1 = parent1.getWeights();
+		ArrayList<Double> w2 = parent2.getWeights();
+		ArrayList<Double> wc = new ArrayList<Double>();
+		
+		int[][] s1 = parent1.getSensors();
+		int[][] s2 = parent2.getSensors();
+		int[][] sc = new int[s2.length][2];
+		
+		
+		/* NEURON -> WEIGHT_RANGE
+		def getRange( neuron, lyrs, wghts ):
+			spread = []
+			for i in range(len(lyrs)):
+				for j in range(lyrs[i]):
+					spread.append(wghts[i])
+			li = spread[:n]
+        	return [sum(li), sum(li)+spread[n]-1]
+		*/
+		
+		
+		//Crossover parent weight vectors on neuron input boundaries
+		int[] segments = new int[parent1.getNeuronCount()];
+		for ( int i=0; i < parent1.getNeuronCount(); i++ ) {
+			int[] weightRange = getNeuronWeightRange( i, neuronsPerLayer, weightsPerLayer );
+			ArrayList<Double> chosenList = (r.nextBoolean()) ? w1 : w2;
+			
+			for ( int j=weightRange[0]; j < weightRange[1]; j++ ) {
+				wc.add( chosenList.get( j ));
+			}
+		}
+		
+		//Crossover parent sensor vectors
+		for ( int i=0; i < s1.length; i++ ) {
+			if (r.nextBoolean()) sc[i] = s1[i].clone();
+			else sc[i] = s2[i].clone();
+		}
+		
+		ShipGenome child =  new ShipGenome( parent1.sensors.length, parent2.lifespan );
+		child.setWeights( wc );
+		child.setSensors( sc );
+		return child;
+	}
+	
+	private static int[] getNeuronWeightRange( int neuron, int[] lyrs, int[] wghts )
+	{
+		/* NEURON -> WEIGHT_RANGE
+		def getRange( neuron, lyrs, wghts ):
+			spread = []
+			for i in range(len(lyrs)):
+				for j in range(lyrs[i]):
+					spread.append(wghts[i])
+			li = spread[:n]
+        	return [sum(li), sum(li)+spread[n]-1]
+		*/
+		
+		int sum = 0;
+		ArrayList<Integer> spread = new ArrayList<Integer>();
+		
+		for ( int i=0; i < lyrs.length; i++ ) {
+			for ( int j=0; j < lyrs[i]; j++ ) {
+				spread.add(wghts[i]);
+			}
+		}
+		ArrayList<Integer> newList = (ArrayList<Integer>) spread.subList( 0, neuron );
+		
+		for ( int i=0; i < newList.size(); i++ ) sum += newList.get(i);
+		return new int[] {sum, sum+spread.get(neuron)};
 	}
 	
 	@Override

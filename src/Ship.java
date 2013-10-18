@@ -96,7 +96,7 @@ public class Ship {
 		ArrayList<Double> weights = genome.getWeights();
 		if ( weights.isEmpty() ) genome.setWeights( brain.getWeights() );
 		else brain.setWeights( weights );
-		
+		genome.setNeuronCount( brain.getNeuronCount() );
 	}
 	
 	private void buildSensors()
