@@ -204,18 +204,19 @@ public class ShipContainer {
 				buffer.add( s );
 				
 			} else {
+				// Score genome
 				s.setScore();
-				/*if ( currentBest == null ) {
-					System.out.println( "No best found" );
-					currentBest = s.getGenome();
-				}*/
+				
+				/*
 				if ( s.getGenome().getScore() > currentBest.getScore() ) {
 					System.out.println( s.getGenome().getScore() + " > " + currentBest.getScore() );
 					currentBest.setSensors( s.getGenome().getSensors() ); //) = s.getGenome();
 					currentBest.setWeights( s.getWeights() );
 					currentBest.setScore( s.getGenome().getScore() );
 				}
+				*/
 				
+				// Update genomeList with fit Ships
 				if ( genomeList.size() < MAX_GENOME_COLLECTION_SIZE ) genomeList.add( s.getGenome() );
 				else {
 					Collections.sort( genomeList );

@@ -119,22 +119,33 @@ public class ShipGenome implements Comparable<ShipGenome>{
 		
 	}
 	
+	public static int biasedRandom( int range, boolean low )
+	{	
+		Random r = new Random();
+		int res = (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 )));
+		if ( low ) return range - res;
+		return res;
+	}
+	
 	public static ShipGenome crossover( ArrayList<ShipGenome> genomes, int[] neuronsPerLayer, int[] weightsPerLayer )
 	{
 		//take two from genomes (biased to higher scores)
 		//take some of first's genes, some of second's
 		Random r = new Random();
-		int range = genomes.size();
+		int range = genomes.size()/10;
 		//System.out.println( "RANGE: " + range );
 		Collections.sort( genomes );
 		
 		// total-sqrt ->   0 BIAS <- 	   TOTAL
 		// sqrt 	  ->   0	   -> BIAS TOTAL
-		int v1 = Math.min( range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))), genomes.size()-1 ); 
-		int v2 = Math.min( range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))), genomes.size()-1 );
+			//either choose a random agent, or random biased from top 10%
+		int v1 = ( r.nextInt(100) < 20 ) ? r.nextInt( genomes.size() ) : Math.min( biasedRandom( range, true ), genomes.size()-1 );
+		int v2 = ( r.nextInt(100) < 20 ) ? r.nextInt( genomes.size() ) : Math.min( biasedRandom( range, true ), genomes.size()-1 );
+		//int v1 = Math.min( range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))), genomes.size()-1 ); 
+		//int v2 = Math.min( range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))), genomes.size()-1 );
 		
 		if ( r.nextInt(50) < 5 ) v1 = 0;
-		if ( r.nextInt(50) < 5 ) v1 = Math.min( r.nextInt(10),  genomes.size()-1 );
+		//if ( r.nextInt(50) < 5 ) v1 = Math.min( r.nextInt(10),  genomes.size()-1 );
 		ShipGenome parent1 = genomes.get( v1 );
 		ShipGenome parent2 = genomes.get( v2 );
 		
