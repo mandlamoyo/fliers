@@ -2,6 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/*
+ * FLIERS: A Multi-agent machine learning system for object detection and avoidance
+ * 			using neural networks and evolutionary learning.
+ * 
+ * 			Controls: Press 'C' to only show agents above age cap (50% score of historic fitnesses).
+ * 					  Press Space to print genome scores to console.
+ * 
+ * Mandla Moyo, 2014
+ */
+
+
+
 public class Fliers extends JFrame implements WindowListener
 {
 	private static final int DEFAULT_FPS = 20; 
