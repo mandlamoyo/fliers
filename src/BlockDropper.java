@@ -3,7 +3,7 @@ import java.util.Random;
 
 public class BlockDropper {
 	private static final int LOWERLIMIT = 10;
-	private static final int UPPERLIMIT = 90;
+	private static final int UPPERLIMIT = 60;
 	
 	private int blockThreshold;
 	private Point body;
@@ -33,6 +33,8 @@ public class BlockDropper {
 	{
 		if ( barrier ) {//&& r.nextBoolean()) {
 			obs.add( body.x, body.y );
+			obs.add( body.x, body.y + FlierPanel.BOX_HEIGHT );
+			
 		} else {
 			if ( r.nextInt(100) < blockThreshold ) {
 				obs.add( body.x, body.y );

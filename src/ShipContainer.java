@@ -12,7 +12,8 @@ public class ShipContainer {
 	private static final int SENSOR_COUNT = 8;
 	private static final int MAX_POP_SIZE = 200;
 	private static final int SHIP_BODY_SIZE = 32;
-	private static final int DEFAULT_LIFESPAN = 5000;
+	private static final int SHOW_BEST_LIMIT = 30;
+	private static final int DEFAULT_LIFESPAN = 10000;
 	private static final int MAX_SENSOR_DISTANCE = 70;
 	private static final int MIN_GENOME_COLLECTION_SIZE = 50;
 	private static final int MAX_GENOME_COLLECTION_SIZE = 200;
@@ -111,6 +112,15 @@ public class ShipContainer {
 		while ( genomeList.size() < MAX_GENOME_COLLECTION_SIZE ) genomeList.add( new ShipGenome( SENSOR_COUNT, DEFAULT_LIFESPAN, gid_counter ));
 	}
 	
+	public int getBestScore( int n )
+	{
+		if( genomeList.size() > 0 ) {
+			Collections.sort( genomeList );
+			return genomeList.get(n).getScore();
+		} else {
+			return 0;
+		}
+	}
 	
 	public void printGenomeScores()
 	{
@@ -248,10 +258,14 @@ public class ShipContainer {
 		return false;
 	}
 	
-	public void draw( Graphics g )
+	public void draw( Graphics g, boolean drawBest )
 	{
 		for ( int i=0; i < shipList.size(); i++ ) {
-			shipList.get(i).draw( g );
+			Ship s = shipList.get(i);
+			if( !drawBest || SHOW_BEST_LIMIT >= genomeList.size() || s.getFitness() > getBestScore( SHOW_BEST_LIMIT )) {
+				s.draw( g );
+			}
 		}
 	}
+
 }

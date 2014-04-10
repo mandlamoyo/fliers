@@ -13,10 +13,10 @@ public class FlierPanel extends JPanel implements Runnable
 	private static final int LEFT_ARROW = 37;
 	private static final int DOWN_ARROW = 40;
 	
-	private static final int PWIDTH = 800; //500;
-	private static final int PHEIGHT = 700; //400;
-	private static final int BOX_WIDTH = 32;
-	private static final int BOX_HEIGHT = 32;
+	public static final int PWIDTH = 1504; // Multiple of 32
+	public static final int PHEIGHT = 700; //400;
+	public static final int BOX_WIDTH = 32;
+	public static final int BOX_HEIGHT = 32;
 
 	private static final int NUM_FPS = 10;
 	private static final int SHIP_COUNT = 1;
@@ -24,6 +24,7 @@ public class FlierPanel extends JPanel implements Runnable
 	private boolean running = false;
 	private boolean isPaused = false;
 	private boolean showSelected = false;
+	private boolean drawBest = false;
 	
 	private long gameStartTime;
 	
@@ -86,7 +87,7 @@ public class FlierPanel extends JPanel implements Runnable
 			public void keyPressed( KeyEvent e ) {
 				int kc = e.getKeyCode();
 				if ( kc == SPACE ) ships.printGenomeScores();
-				if ( kc == C_KEY ) ships.printShipScores();
+				if ( kc == C_KEY ) drawBest = !drawBest; //ships.printShipScores();
 				if ( kc >= LEFT_ARROW && kc <= DOWN_ARROW ) {
 					System.out.println( "Pressed " + (kc-LEFT_ARROW) );
 					flTop.setDirection( kc-LEFT_ARROW );
@@ -195,6 +196,7 @@ public class FlierPanel extends JPanel implements Runnable
 		//player.update();
 		ships.update();
 		bdc.update();
+		flTop.setScore( ships.getBestScore(0) );
 	}
 	
 	private void gameRender()
@@ -219,7 +221,7 @@ public class FlierPanel extends JPanel implements Runnable
 		}
 		
 		obs.draw(dbg);
-		ships.draw(dbg);
+		ships.draw(dbg,drawBest);
 		//player.draw(dbg);
 	}
 	

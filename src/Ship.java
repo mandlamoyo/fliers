@@ -24,7 +24,7 @@ public class Ship {
 	private static final int BODY_SIZE = 32;
 	private static final int RADIUS = BODY_SIZE/2;
 	
-	private static final int OOB_PENALTY = 40;
+	private static final int OOB_PENALTY = 60;
 	private static final int BRICK_PENALTY = 80;
 	
 	// { SENSOR OUTPUT, SENSOR POSITIONS, BRAIN_OUTPUT, BRAIN_WEIGHTS, VELOCITY }

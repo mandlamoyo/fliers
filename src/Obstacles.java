@@ -3,11 +3,6 @@ import java.util.ArrayList;
 
 
 public class Obstacles {
-	//private static final int bWidth = 32;
-	//private static final int bHeight = 32;
-	
-	private static final int PWIDTH = 800; //500;
-	private static final int PHEIGHT = 700; //400;
 	
 	private int bWidth;
 	private int bHeight;
@@ -26,7 +21,6 @@ public class Obstacles {
 	synchronized public void add( int x, int y )
 	{
 		boxes.add( new Rectangle( x-bWidth/2, y-bHeight/2, bWidth, bHeight ));
-		flTop.setScore( boxes.size() );
 	}
 	
 	synchronized public boolean isSelectedAt( int x, int y )
@@ -78,7 +72,7 @@ public class Obstacles {
 			box = (Rectangle) boxes.get(i);
 			box.y += 1;
 			
-			if ( box.y < PHEIGHT ) {
+			if ( box.y < FlierPanel.PHEIGHT ) {
 				livingBoxes.add( box );
 			}
 		}
