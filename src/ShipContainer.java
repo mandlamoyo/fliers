@@ -32,6 +32,8 @@ public class ShipContainer {
 	private int shipsFromGenomes;
 	private int totalShipsCreated;
 	
+	private int lifeExtended;
+	
 	private Obstacles obs;
 	private Random r;
 	private ArrayList<Ship> shipList;
@@ -40,6 +42,7 @@ public class ShipContainer {
 	
 	public ShipContainer( int pW, int pH, Obstacles os )
 	{
+		lifeExtended = DEFAULT_LIFESPAN;
 		gid_counter = 0;
 		shipIds = 0;
 		start = 0;
@@ -49,7 +52,7 @@ public class ShipContainer {
 		r = new Random();
 		shipList = new ArrayList<Ship>();
 		genomeList = new ArrayList<ShipGenome>();
-		currentBest = new ShipGenome( SENSOR_COUNT, DEFAULT_LIFESPAN, gid_counter );
+		currentBest = new ShipGenome( SENSOR_COUNT, lifeExtended, gid_counter );
 		//scoredWeightsList = new ArrayList<ScoredWeights>();
 	}
 	
@@ -85,7 +88,7 @@ public class ShipContainer {
 	
 	public void buildRandom()
 	{	
-		ShipGenome genome = new ShipGenome( SENSOR_COUNT, DEFAULT_LIFESPAN, gid_counter );
+		ShipGenome genome = new ShipGenome( SENSOR_COUNT, lifeExtended, gid_counter );
 		buildShip( genome );
 		gid_counter++;
 	}
@@ -109,7 +112,7 @@ public class ShipContainer {
 	
 	private void populateGenomeList()
 	{
-		while ( genomeList.size() < MAX_GENOME_COLLECTION_SIZE ) genomeList.add( new ShipGenome( SENSOR_COUNT, DEFAULT_LIFESPAN, gid_counter ));
+		while ( genomeList.size() < MAX_GENOME_COLLECTION_SIZE ) genomeList.add( new ShipGenome( SENSOR_COUNT, lifeExtended, gid_counter ));
 	}
 	
 	public int getBestScore( int n )
@@ -121,6 +124,9 @@ public class ShipContainer {
 			return 0;
 		}
 	}
+	
+	public int getCurrentLifeSpan()
+	{	return lifeExtended; }
 	
 	public void printGenomeScores()
 	{
@@ -171,15 +177,17 @@ public class ShipContainer {
 	
 	public void update()
 	{
+		lifeExtended = DEFAULT_LIFESPAN + getBestScore( genomeList.size()/2 );
+		
 		if ( genomeList.size() > 10 ) {
-			ShipGenome g = new ShipGenome( SENSOR_COUNT, DEFAULT_LIFESPAN, gid_counter );
+			ShipGenome g = new ShipGenome( SENSOR_COUNT, lifeExtended, gid_counter );
 			g.setSensors( currentBest.getSensors() );
 			g.setWeights( currentBest.getWeights() );
 			if ( r.nextInt(100) < 15 ) buildShip( g );
 			//if ( r.nextInt(100) < 5 ) buildShip( genomeList.get(r.nextInt(10)));
 			for ( int i=0; i < 10; i++ ) {
 				if ( r.nextInt(100) < 5 ) {
-					ShipGenome g2 = new ShipGenome( SENSOR_COUNT, DEFAULT_LIFESPAN, gid_counter );
+					ShipGenome g2 = new ShipGenome( SENSOR_COUNT, lifeExtended, gid_counter );
 					g2.setSensors( genomeList.get(i).getSensors() );
 					g2.setWeights( genomeList.get(i).getWeights() );
 					buildShip( g2 );

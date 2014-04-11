@@ -64,8 +64,8 @@ public class Fliers extends JFrame implements WindowListener
 	public void setScore( int score )
 	{ jtfScore.setText( "Score: " + score ); }
 	
-	public void setDirection( int dir )
-	{ jtfDir.setText( "Direction: " + dirList[dir] ); }
+	public void setLifeSpan( int ls )
+	{ jtfDir.setText( "Current Lifespan: " + ls ); }
 	
 	public void setTimeSpent( long t )
 	{ jtfTime.setText( "Time Spent: " + t + " secs" ); }

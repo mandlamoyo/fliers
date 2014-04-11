@@ -90,7 +90,7 @@ public class FlierPanel extends JPanel implements Runnable
 				if ( kc == C_KEY ) drawBest = !drawBest; //ships.printShipScores();
 				if ( kc >= LEFT_ARROW && kc <= DOWN_ARROW ) {
 					System.out.println( "Pressed " + (kc-LEFT_ARROW) );
-					flTop.setDirection( kc-LEFT_ARROW );
+					//flTop.setDirection( kc-LEFT_ARROW );
 					//player.move( kc-37 );
 				}
 			}
@@ -185,6 +185,8 @@ public class FlierPanel extends JPanel implements Runnable
 			timeSpentInGame = (int) ((timeNow - gameStartTime)/1000000000L);
 			//timeSpentInGame = 5;
 			flTop.setTimeSpent( timeSpentInGame );
+			flTop.setScore( ships.getBestScore(0) );
+			flTop.setLifeSpan( ships.getCurrentLifeSpan() );
 		}
 		
 		
@@ -196,7 +198,6 @@ public class FlierPanel extends JPanel implements Runnable
 		//player.update();
 		ships.update();
 		bdc.update();
-		flTop.setScore( ships.getBestScore(0) );
 	}
 	
 	private void gameRender()
