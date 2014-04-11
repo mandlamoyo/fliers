@@ -6,8 +6,11 @@ import java.awt.event.*;
  * FLIERS: A Multi-agent machine learning system for object detection and avoidance
  * 			using neural networks and evolutionary learning.
  * 
- * 			Controls: Press 'C' to only show agents above age cap (50% score of historic fitnesses).
- * 					  Press Space to print genome scores to console.
+ * 			Controls: Press 'C' to toggle only show agents above age cap (50% score of historic fitnesses).
+ * 					  Press 'H' to toggle hide animation (runs faster).
+ * 					  Press 'Space' to print genome scores to console.
+ * 					  Select an agent with the mouse to display its score and lifespan.
+ * 
  * 
  * Mandla Moyo, 2014
  */
@@ -23,7 +26,9 @@ public class Fliers extends JFrame implements WindowListener
 	private FlierPanel fp;
 	private JTextField jtfScore;
 	private JTextField jtfDir;
+	private JTextField jtfThresh;
 	private JTextField jtfTime;
+	private JTextField jtfTicks;
 	
 	public Fliers( long period )
 	{
@@ -54,9 +59,17 @@ public class Fliers extends JFrame implements WindowListener
 		jtfDir.setEditable( false );
 		ctrls.add( jtfDir );
 		
+		jtfThresh = new JTextField( "Block drop chance (avg): 0%" );
+		jtfThresh.setEditable( false );
+		ctrls.add( jtfThresh );
+		
 		jtfTime = new JTextField( "Time spend: 0 secs" );
 		jtfTime.setEditable( false );
 		ctrls.add( jtfTime );
+		
+		jtfTicks = new JTextField( "Ticks: 0" );
+		jtfTicks.setEditable( false );
+		ctrls.add( jtfTicks );
 		
 		c.add( ctrls, "South" );
 	}
@@ -67,9 +80,15 @@ public class Fliers extends JFrame implements WindowListener
 	public void setLifeSpan( int ls )
 	{ jtfDir.setText( "Current Lifespan: " + ls ); }
 	
+	public void setThreshChance( float t )
+	{ jtfThresh.setText( "Block drop chance (avg): " + t + "%" ); }
+	
 	public void setTimeSpent( long t )
 	{ jtfTime.setText( "Time Spent: " + t + " secs" ); }
 		
+	public void setTicks( long t )
+	{ jtfTicks.setText( "Ticks: " + t ); }
+	
 	
 	public void windowActivated( WindowEvent e )
 	{ fp.resumeGame(); }

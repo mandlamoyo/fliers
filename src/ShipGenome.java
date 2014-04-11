@@ -6,6 +6,7 @@ import java.util.Collections;
 public class ShipGenome implements Comparable<ShipGenome>{
 	private static final int X = 0;
 	private static final int Y = 1;
+	private static final int CHANCE_BEST_IS_PARENT = 10; //5 (only if non-random is selected [80%])
 	private static final int CHANCE_OF_MUTATION = 40; //out of 100 (actually 2/3 of this value)
 	private static final int SENSOR_MOVEMENT_RANGE = 10;
 	private static final int MAX_SENSOR_DISTANCE = 70;
@@ -132,19 +133,19 @@ public class ShipGenome implements Comparable<ShipGenome>{
 		//take two from genomes (biased to higher scores)
 		//take some of first's genes, some of second's
 		Random r = new Random();
-		int range = genomes.size()/10;
+		int range = genomes.size() >> 3; // /10;
 		//System.out.println( "RANGE: " + range );
 		Collections.sort( genomes );
 		
 		// total-sqrt ->   0 BIAS <- 	   TOTAL
 		// sqrt 	  ->   0	   -> BIAS TOTAL
-			//either choose a random agent, or random biased from top 10%
+			//either choose a random agent, or random biased from top 12% (right bitshift)
 		int v1 = ( r.nextInt(100) < 20 ) ? r.nextInt( genomes.size() ) : Math.min( biasedRandom( range, true ), genomes.size()-1 );
 		int v2 = ( r.nextInt(100) < 20 ) ? r.nextInt( genomes.size() ) : Math.min( biasedRandom( range, true ), genomes.size()-1 );
 		//int v1 = Math.min( range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))), genomes.size()-1 ); 
 		//int v2 = Math.min( range - (int) Math.sqrt( r.nextInt( (int)Math.pow( range, 2 ))), genomes.size()-1 );
 		
-		if ( r.nextInt(50) < 5 ) v1 = 0;
+		if ( r.nextInt(100) < CHANCE_BEST_IS_PARENT ) v1 = 0;
 		//if ( r.nextInt(50) < 5 ) v1 = Math.min( r.nextInt(10),  genomes.size()-1 );
 		ShipGenome parent1 = genomes.get( v1 );
 		ShipGenome parent2 = genomes.get( v2 );

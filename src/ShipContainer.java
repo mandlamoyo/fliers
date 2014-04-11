@@ -12,7 +12,7 @@ public class ShipContainer {
 	private static final int SENSOR_COUNT = 8;
 	private static final int MAX_POP_SIZE = 200;
 	private static final int SHIP_BODY_SIZE = 32;
-	private static final int SHOW_BEST_LIMIT = 30;
+	public static final int SHOW_BEST_LIMIT = 30;
 	private static final int DEFAULT_LIFESPAN = 10000;
 	private static final int MAX_SENSOR_DISTANCE = 70;
 	private static final int MIN_GENOME_COLLECTION_SIZE = 50;
@@ -248,22 +248,26 @@ public class ShipContainer {
 		
 	}
 	
-	public boolean isSelectedAt( int x, int y )
+	public Ship getSelectedAt( int x, int y )
 	{
+		Ship selected = null;
 		for( int i=0; i < shipList.size(); i++) {
 			Ship s = shipList.get(i);
-			int[] shipPos = s.getOrigin();
-			if( x+SHIP_BODY_SIZE/2 >= shipPos[X] && x+SHIP_BODY_SIZE/2 <= shipPos[X]+SHIP_BODY_SIZE && y+SHIP_BODY_SIZE/2 >= shipPos[Y] && y+SHIP_BODY_SIZE/2 <= shipPos[Y]+SHIP_BODY_SIZE ) {
-				if ( !s.isSelected() ) s.select();
-				else s.deselect();
-				
-				return true;
-				
-			} else {
-				s.deselect();
+			if( s.isActive() ) {
+				int[] shipPos = s.getOrigin();
+				if( x+SHIP_BODY_SIZE/2 >= shipPos[X] && x+SHIP_BODY_SIZE/2 <= shipPos[X]+SHIP_BODY_SIZE && y+SHIP_BODY_SIZE/2 >= shipPos[Y] && y+SHIP_BODY_SIZE/2 <= shipPos[Y]+SHIP_BODY_SIZE ) {
+					if ( !s.isSelected() ) {
+						s.select();
+						selected = s;
+					} else {
+						s.deselect();
+					}
+				} else {
+					s.deselect();
+				}
 			}
 		}
-		return false;
+		return selected;
 	}
 	
 	public void draw( Graphics g, boolean drawBest )
@@ -272,6 +276,9 @@ public class ShipContainer {
 			Ship s = shipList.get(i);
 			if( !drawBest || SHOW_BEST_LIMIT >= genomeList.size() || s.getFitness() > getBestScore( SHOW_BEST_LIMIT )) {
 				s.draw( g );
+				s.setActive();
+			} else {
+				s.setInactive();
 			}
 		}
 	}

@@ -43,6 +43,7 @@ public class Ship {
 	private int lifespan;
 	private int fitness;
 	private boolean isSelected;
+	private boolean isActive;
 	
 	private ArrayList<Double> brainOutput;
 	private ArrayList<Double> sensorOutput;
@@ -69,6 +70,7 @@ public class Ship {
 		
 		fitness = 0;
 		isSelected = false;
+		isActive = true;
 		lifespan = genome.getLifespan();
 		
 		body = new Point( pWidth/2, pHeight/2 );
@@ -124,14 +126,24 @@ public class Ship {
 		return false;
 	}
 	
+	public void setActive()
+	{	isActive = true; }
+	
 	public void select()
 	{	isSelected = true; }
+	
+	
+	public void setInactive()
+	{	isActive = false; }
 	
 	public void deselect()
 	{	isSelected = false; }
 	
 	public boolean isSelected()
 	{	return isSelected; }
+	
+	public boolean isActive()
+	{	return isActive; }
 	
 	//----- ACCESSOR FUNCTIONS -----//
 	// SET
@@ -240,7 +252,10 @@ public class Ship {
 	public int update()
 	{	
 		//Check life
-		if ( lifespan <= 0 ) return fitness;
+		if ( lifespan <= 0 ) {
+			isActive = false;
+			return fitness;
+		}
 
 		//Update sensors
 		getSensorOutput();

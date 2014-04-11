@@ -10,6 +10,7 @@ public class FlierPanel extends JPanel implements Runnable
 {
 	private static final int SPACE = 32;
 	private static final int C_KEY = 67;
+	private static final int H_KEY = 72;
 	private static final int LEFT_ARROW = 37;
 	private static final int DOWN_ARROW = 40;
 	
@@ -25,6 +26,7 @@ public class FlierPanel extends JPanel implements Runnable
 	private boolean isPaused = false;
 	private boolean showSelected = false;
 	private boolean drawBest = false;
+	private boolean doRender = true;
 	
 	private long gameStartTime;
 	
@@ -36,9 +38,11 @@ public class FlierPanel extends JPanel implements Runnable
 	private Obstacles obs;
 	private BlockDropperContainer bdc;
 	private ShipContainer ships;
+	private Ship selectedShip;
+	
 	//private Ship player;
 	private long period;
-	
+	private long ticks;
 	
 	private int timeSpentInGame;
 	
@@ -51,6 +55,7 @@ public class FlierPanel extends JPanel implements Runnable
 	public FlierPanel( Fliers fl, long period )
 	{
 		flTop = fl;
+		ticks = 0;
 		this.period = period;
 		
 		setBackground( Color.white );
@@ -87,7 +92,11 @@ public class FlierPanel extends JPanel implements Runnable
 			public void keyPressed( KeyEvent e ) {
 				int kc = e.getKeyCode();
 				if ( kc == SPACE ) ships.printGenomeScores();
-				if ( kc == C_KEY ) drawBest = !drawBest; //ships.printShipScores();
+				if ( kc == C_KEY ) {
+					System.out.println( ships.getBestScore( ShipContainer.SHOW_BEST_LIMIT ));
+					drawBest = !drawBest; //ships.printShipScores();
+				}
+				if ( kc == H_KEY ) doRender = !doRender;
 				if ( kc >= LEFT_ARROW && kc <= DOWN_ARROW ) {
 					System.out.println( "Pressed " + (kc-LEFT_ARROW) );
 					//flTop.setDirection( kc-LEFT_ARROW );
@@ -146,9 +155,7 @@ public class FlierPanel extends JPanel implements Runnable
 	
 	private void testPress( int x, int y )
 	{
-		if (!isPaused) {
-			if ( !ships.isSelectedAt(x,y) ) ships.buildRandom();
-		}
+		if (!isPaused) selectedShip = ships.getSelectedAt(x, y);
 		
 		/*
 		if (!isPaused) {
@@ -171,22 +178,38 @@ public class FlierPanel extends JPanel implements Runnable
 		
 		while (running) {
 			gameUpdate();
-			gameRender();
+			if( doRender ) gameRender();
 			paintScreen();
+			ticks++;
 			
-			try {
-				Thread.sleep(4);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if( doRender ) {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-
+			
 			long timeNow = System.nanoTime();
 			timeSpentInGame = (int) ((timeNow - gameStartTime)/1000000000L);
 			//timeSpentInGame = 5;
+			
+			
+			
+			if( selectedShip != null ) {
+				flTop.setScore( selectedShip.getFitness() );
+				flTop.setLifeSpan( selectedShip.getLifespan() );
+				if( !selectedShip.isActive() ) selectedShip = null;
+			} else {
+				flTop.setScore( ships.getBestScore(0) );
+				flTop.setLifeSpan( ships.getCurrentLifeSpan() );
+			}
+			
 			flTop.setTimeSpent( timeSpentInGame );
-			flTop.setScore( ships.getBestScore(0) );
-			flTop.setLifeSpan( ships.getCurrentLifeSpan() );
+			flTop.setThreshChance( bdc.getThresholdAverage() );
+			
+			flTop.setTicks( ticks >> 5 );
 		}
 		
 		
