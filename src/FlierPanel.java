@@ -12,6 +12,7 @@ public class FlierPanel extends JPanel implements Runnable
 	private static final int C_KEY = 67;
 	private static final int H_KEY = 72;
 	private static final int LEFT_ARROW = 37;
+	private static final int RIGHT_ARROW = 39;
 	private static final int DOWN_ARROW = 40;
 	
 	public static final int PWIDTH = 1504; // Multiple of 32
@@ -21,6 +22,7 @@ public class FlierPanel extends JPanel implements Runnable
 
 	private static final int NUM_FPS = 10;
 	private static final int SHIP_COUNT = 1;
+	private static final int MAX_LAG = 15;
 	
 	private boolean running = false;
 	private boolean isPaused = false;
@@ -44,6 +46,7 @@ public class FlierPanel extends JPanel implements Runnable
 	private long period;
 	private long ticks;
 	
+	private int lag;
 	private int timeSpentInGame;
 	
 	private Font font;
@@ -56,6 +59,7 @@ public class FlierPanel extends JPanel implements Runnable
 	{
 		flTop = fl;
 		ticks = 0;
+		lag = 5;
 		this.period = period;
 		
 		setBackground( Color.white );
@@ -97,11 +101,13 @@ public class FlierPanel extends JPanel implements Runnable
 					drawBest = !drawBest; //ships.printShipScores();
 				}
 				if ( kc == H_KEY ) doRender = !doRender;
-				if ( kc >= LEFT_ARROW && kc <= DOWN_ARROW ) {
-					System.out.println( "Pressed " + (kc-LEFT_ARROW) );
+				if ( kc == LEFT_ARROW && lag < MAX_LAG ) lag++;
+				if ( kc == RIGHT_ARROW && lag > 0 ) lag--;
+				//if ( kc >= LEFT_ARROW && kc <= DOWN_ARROW ) {
+					//System.out.println( "Pressed " + (kc-LEFT_ARROW) );
 					//flTop.setDirection( kc-LEFT_ARROW );
 					//player.move( kc-37 );
-				}
+				//}
 			}
 		});
 		
@@ -184,7 +190,7 @@ public class FlierPanel extends JPanel implements Runnable
 			
 			if( doRender ) {
 				try {
-					Thread.sleep(10);
+					Thread.sleep( lag );
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

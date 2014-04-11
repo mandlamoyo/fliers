@@ -9,6 +9,8 @@ import java.awt.event.*;
  * 			Controls: Press 'C' to toggle only show agents above age cap (50% score of historic fitnesses).
  * 					  Press 'H' to toggle hide animation (runs faster).
  * 					  Press 'Space' to print genome scores to console.
+ * 					  Press 'Left Arrow' to slow down, 'Right Arrow' to speed up.
+ * 
  * 					  Select an agent with the mouse to display its score and lifespan.
  * 
  * 
